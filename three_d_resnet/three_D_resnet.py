@@ -1,41 +1,51 @@
 from tensorflow import keras
-from models.custom_layers import ResidualBlock, ResidualBottleneckBlock, ResidualConvBlock, ResidualConvBottleneckBlock
+from layers import ResidualBlock, ResidualBottleneckBlock, ResidualConvBlock, ResidualConvBottleneckBlock
 
 
-class ThreeDConvolutionResNet18(keras.Model):
-    def __init__(self, width, height, frames, channels, mean, std, output=1):
-        super(ThreeDConvolutionResNet18, self).__init__()
-        input_shape = (frames, width, height, channels)
-        self.resnet = keras.Sequential([
+class ThreeDConvolutionResNet(keras.Model):
+    def __init__(self, input_shape, output_shape, kernel_numbers, repetetions, output_activation, regularizer=None, mean=0, std=1):
+        super(ThreeDConvolutionResNet, self).__init__()
+        resnet_head = keras.Sequential([
             keras.layers.experimental.preprocessing.Rescaling(scale=1 / std, offset=-mean / std,
                                                               input_shape=input_shape),
-            # fix resnet head
-            keras.layers.Conv3D(64, 7, 2, use_bias=False, kernel_regularizer=keras.regularizers.l2()),
+            keras.layers.Conv3D(64, 7, 2, use_bias=False, kernel_regularizer=regularizer),
             keras.layers.BatchNormalization(),
             keras.layers.ReLU(),
-            keras.layers.MaxPool3D(3, 2),
+            keras.layers.MaxPool3D(3, 2)])
 
-            # variable 2 layer blocks
-            ResidualBlock(64, 3),
-            ResidualBlock(64, 3),
+        resnet_body = keras.Sequential()
+        for number_of_blocks in repetetions:
+            for i in range(number_of_blocks):
+                if i = 0:
+                    resnet_body.add(ResidualConvBlock())
+                else:
+                    resnet_body.add(ResidualBlock())
 
-            ResidualConvBlock(128, 3, 2),
-            ResidualBlock(128, 3),
 
-           #  ResidualConvBlock(256, 3, 2),
-           #  ResidualBlock(256, 3),
+        # variable 2 layer blocks
+        ResidualBlock(64, 3)
+        ResidualBlock(64, 3)
 
-            # ResidualConvBlock(512, 3, 2),
-            # ResidualBlock(512, 3),
+        ResidualConvBlock(128, 3, 2)
+        ResidualBlock(128, 3)
 
-            # fix resnet tail
+        ResidualConvBlock(256, 3, 2)
+        ResidualBlock(256, 3)
+
+        ResidualConvBlock(512, 3, 2)
+        ResidualBlock(512, 3)
+
+        # fix resnet tail
+        resnet_tail = keras.Sequential(
+            [
             keras.layers.GlobalAvgPool3D(),
             keras.layers.Flatten(),
-            keras.layers.Dense(output),
-        ]
+            keras.layers.Dense(output_shape, activation=output_activation),
+            ]
         )
+        self.resnet = keras.Sequential([resnet_head, resnet_body, resnet_tail])
 
-    def call(self, inputs, training=False, **kwargs):
+    def call(self, inputs, training=None, **kwargs):
         return self.resnet(inputs)
 
 
