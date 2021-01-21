@@ -33,8 +33,10 @@ def train_resnet():
 
 def normalize_img(sample):
     """Normalizes images: `uint8` -> `float32`."""
-    return sample['video'], sample['label']
-    #return tf.cast(video, tf.float32) / 255., label
+    video = sample['video']
+    video = tf.cast(video, tf.float32) / 255.
+    return video, sample['label']
+    #return , label
 
 
 if __name__ == '__main__':
