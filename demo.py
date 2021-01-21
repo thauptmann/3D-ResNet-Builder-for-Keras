@@ -16,7 +16,6 @@ def train_resnet():
     train_dataset = train_dataset.map(lambda sample: normalize_img( sample),
                                       num_parallel_calls=tf.data.experimental.AUTOTUNE)
     train_dataset = train_dataset.prefetch(tf.data.experimental.AUTOTUNE)
-    train_dataset = train_dataset.take(1)  # Only take a single example
     test_dataset = test_dataset.map(lambda sample: normalize_img(sample),
                                     num_parallel_calls=tf.data.experimental.AUTOTUNE)
     test_dataset = test_dataset.prefetch(tf.data.experimental.AUTOTUNE)
