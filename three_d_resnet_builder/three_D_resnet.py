@@ -1,9 +1,9 @@
 from tensorflow import keras
-from layers import ResidualBlock, ResidualBottleneckBlock, ResidualConvBlock, ResidualConvBottleneckBlock
+from .layers import ResidualBlock, ResidualBottleneckBlock, ResidualConvBlock, ResidualConvBottleneckBlock
 
 
 class ThreeDConvolutionResNet(keras.Model):
-    def __init__(self, input_shape, output_shape, repetitions, output_activation, regularizer=None,
+    def __init__(self, input_shape, output_shape, output_activation, repetitions, regularizer=None,
                  squeeze_and_excitation=False, use_bottleneck=False, kernel_size=3):
         super(ThreeDConvolutionResNet, self).__init__()
         if use_bottleneck:
@@ -27,12 +27,12 @@ class ThreeDConvolutionResNet(keras.Model):
             for i in range(repetition):
                 if i == 0:
                     resnet_body.add(residual_conv_block(kernel_number, kernel_size, regularizer,
-                                                        squeeze_and_excitation, strides=strides))
+                                                        squeeze_and_excitation=squeeze_and_excitation, strides=strides))
                 else:
                     resnet_body.add(residual_block(kernel_number, kernel_size, regularizer,
-                                                   squeeze_and_excitation, strides=1))
+                                                   squeeze_and_excitation))
                 strides = 2
-                kernel_number *= 2
+            kernel_number *= 2
 
         # fix resnet tail
         resnet_tail = keras.Sequential(
