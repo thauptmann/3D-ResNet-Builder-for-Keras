@@ -79,7 +79,7 @@ class ResidualBottleneckBlock(keras.layers.Layer):
         )
         self.relu = keras.layers.ReLU()
         if self.squeeze_and_excitation:
-            self.se_path = SqueezeAndExcitationPath(kernel_number)
+            self.se_path = SqueezeAndExcitationPath(kernel_number * 4)
 
     def call(self, inputs, training=None, **kwargs):
         intermediate_output = self.resnet_bottleneck_block(inputs)
@@ -112,7 +112,7 @@ class ResidualConvBottleneckBlock(keras.layers.Layer):
         ]
         )
         if self.squeeze_and_excitation:
-            self.se_path = SqueezeAndExcitationPath(kernel_number)
+            self.se_path = SqueezeAndExcitationPath(kernel_number * 4)
 
     def call(self, inputs, training=None, **kwargs):
         intermediate_output = self.resnet_conv_bottleneck_block(inputs)
