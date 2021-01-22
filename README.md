@@ -36,7 +36,7 @@ build_three_d_resnet(input_shape, output_shape, repetitions, output_activation, 
 ## Demo
 For testing purpose I chose the Ucf101 dataset [3]. It contains around 13.000 videos with 101 labels of different actions.
 
-**But caution** this will download approximately 6.5G iB and will run for a long time, even with a GPU. Without
+**But caution** this will download approximately 6.5 GiB and will run for a long time, even with a GPU. Without
 it, it  will probably crash. (Unfortunately I have not found a smaller and easier example dataset. I am open for advices.)
 
 
