@@ -15,18 +15,18 @@ def train_resnet():
         optimizer=tf.keras.optimizers.Adam(0.001),
         loss=tf.keras.losses.SparseCategoricalCrossentropy(),
         metrics=[
-            tf.keras.metrics.SparseTopKCategoricalAccuracy(k=1),
-            tf.keras.metrics.SparseTopKCategoricalAccuracy(k=2),
+            tf.keras.metrics.SparseTopKCategoricalAccuracy(k=1, name='top_1_accuracy'),
+            tf.keras.metrics.SparseTopKCategoricalAccuracy(k=5, name='top_5_accuracy'),
         ],
     )
 
-    resnet_18.fit(train_dataset, epochs=6, validation_data=test_dataset)
+    resnet_18.fit(train_dataset, epochs=1, validation_data=test_dataset)
 
 
 def load_ucf101():
     config = tfds.download.DownloadConfig(verify_ssl=False)
     (train_dataset, test_dataset), ds_info = tfds.load("ucf101", split=['train', 'test'], with_info=True,
-                                                       shuffle_files=True, batch_size=10,
+                                                       shuffle_files=True, batch_size=5,
                                                        download_and_prepare_kwargs={"download_config": config})
     train_dataset = train_dataset.map(lambda sample: normalize_img(sample),
                                       num_parallel_calls=tf.data.experimental.AUTOTUNE)
