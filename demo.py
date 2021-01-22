@@ -20,14 +20,14 @@ def train_resnet():
         ],
     )
 
-    resnet_18.fit(train_dataset, epochs=1, validation_data=test_dataset)
+    resnet_18.fit(train_dataset, epochs=5, validation_data=test_dataset)
 
 
 def load_ucf101():
     autotune = tf.data.experimental.AUTOTUNE
     config = tfds.download.DownloadConfig(verify_ssl=False)
     (train_dataset, test_dataset), ds_info = tfds.load("ucf101", split=['train', 'test'], with_info=True,
-                                                       shuffle_files=True, batch_size=1,
+                                                       shuffle_files=True, batch_size=10,
                                                        download_and_prepare_kwargs={"download_config": config})
     train_dataset = train_dataset.map(lambda sample: normalize_img(sample),
                                       num_parallel_calls=autotune)
