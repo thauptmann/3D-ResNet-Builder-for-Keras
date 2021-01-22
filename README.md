@@ -38,7 +38,7 @@ it, it  will probably crash. (Unfortunately I have not found a smaller and easie
 
 For decoding the images *ffmpeg* needs to be installed:
 ~~~shell
-apt install ffmpeg
+$ apt install ffmpeg
 ~~~
 
 To install the requirements and run the demo, run the following commands at the root directory:
