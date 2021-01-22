@@ -42,7 +42,7 @@ it, it  will probably crash. (Unfortunately I have not found a smaller and easie
 
 To install the requirements and run the demo, run the following commands at the root of the directory:
 ~~~shell
-$ python -m pip install -r requiremts.txt <br>
+$ python -m pip install -r requiremts.txt 
 $ python demo.py
 ~~~
  
