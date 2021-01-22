@@ -15,7 +15,7 @@ import three_d_resnet_builder
 ~~~
 
 ## Usage
-The convenient functions (*build_three_d_resnet_**) just need an input shape, an output shape and an activation function to create a network. Additional customisable are the usage of regularization and squeeze-and-excitation layers. By changing *squeeze_and_excitation* to *True* the network will be build with squeeze-and-excitation layers [2]. In the best case, this improves the capabilities of the network with a very small calculation overhead and without increasing the depth of the network.
+The convenient functions (*build_three_d_resnet_&ast;*) just need an input shape, an output shape and an activation function to create a network. Additional customisable are the usage of regularization and squeeze-and-excitation layers. By changing *squeeze_and_excitation* to *True* the network will be build with squeeze-and-excitation layers [2]. In the best case, this improves the capabilities of the network with a very small calculation overhead and without increasing the depth of the network.
 
 ~~~python
 three_d_resnet_builder.build_three_d_resnet_18(input_shape, output_shape, activation_function, regularizer,
