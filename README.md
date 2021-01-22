@@ -28,7 +28,7 @@ and without increasing the depth of the network.
 
 The general function (*build_three_d_resnet*) allows it to change the architecture of the network.
 ~~~python
-build_three_d_resnet(input_shape, output_shape, repetitions, output_activation, regularizer, squeeze_and_excitation, 
+three_d_resnet_builder.build_three_d_resnet(input_shape, output_shape, repetitions, output_activation, regularizer, squeeze_and_excitation, 
                      use_bottleneck, kernel_size)
 ~~~
 
