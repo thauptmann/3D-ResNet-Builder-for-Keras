@@ -39,13 +39,18 @@ For testing purpose I chose the Ucf101 dataset [3]. It contains around 13.000 vi
 **But caution** this will download approximately 6.5 GiB and will run for a long time, even with a GPU. Without
 it, it  will probably crash. (Unfortunately I have not found a smaller and easier example dataset. I am open for advices.)
 
+For decoding the images *ffmpeg* needs to be installed:
+~~~shell
+apt install ffmpeg
+~~~
 
-To install the requirements and run the demo, run the following commands at the root of the directory:
+To install the requirements and run the demo, run the following commands at the root directory:
 ~~~shell
 $ python -m pip install -r requirements.txt 
 $ python demo.py
 ~~~
  
+
 
 ---
 
