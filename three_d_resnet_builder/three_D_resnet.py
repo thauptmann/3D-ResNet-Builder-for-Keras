@@ -3,8 +3,22 @@ from .layers import ResidualBlock, ResidualBottleneckBlock, ResidualConvBlock, R
 
 
 class ThreeDConvolutionResNet(keras.Model):
+    """
+
+    """
     def __init__(self, input_shape, output_shape, output_activation, repetitions, regularizer=None,
                  squeeze_and_excitation=False, use_bottleneck=False, kernel_size=3):
+        """Build the desired network.
+
+        :param input_shape:
+        :param output_shape:
+        :param output_activation:
+        :param repetitions:
+        :param regularizer:
+        :param squeeze_and_excitation:
+        :param use_bottleneck:
+        :param kernel_size:
+        """
         super(ThreeDConvolutionResNet, self).__init__()
         if use_bottleneck:
             residual_conv_block = ResidualConvBottleneckBlock
@@ -45,4 +59,11 @@ class ThreeDConvolutionResNet(keras.Model):
         self.resnet = keras.Sequential([resnet_head, resnet_body, resnet_tail])
 
     def call(self, inputs, training=False, **kwargs):
+        """Called to train the network or predict values.
+
+        :param inputs:
+        :param training:
+        :param kwargs:
+        :return:
+        """
         return self.resnet(inputs)

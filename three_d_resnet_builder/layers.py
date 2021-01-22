@@ -147,6 +147,9 @@ class SqueezeAndExcitationPath(keras.layers.Layer):
 
 
 class CustomConv3D(keras.layers.Layer):
+    """
+    Convenient layer to create Conv3D -> Batch Normalization -> ReLU blocks faster
+    """
     def __init__(self, kernel_number, kernel_size, regularizer=None, strides=1, use_bn=False, padding='valid',
                  **kwargs):
         super(CustomConv3D, self).__init__(**kwargs)
