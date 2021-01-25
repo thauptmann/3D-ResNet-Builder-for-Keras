@@ -5,8 +5,10 @@ import tensorflow as tf
 
 def train_resnet():
     seed_value = 5
+    batch_size = 10
+    epochs = 5
     tf.random.set_seed(seed_value)
-    train_dataset, test_dataset, info = load_ucf101()
+    train_dataset, validation_dataset, test_dataset, info = load_ucf101(batch_size)
     input_shape = info.features['video'].shape
     output_shape = info.features['label'].num_classes
 
@@ -19,23 +21,34 @@ def train_resnet():
             tf.keras.metrics.SparseTopKCategoricalAccuracy(k=5, name='top_5_accuracy'),
         ],
     )
+    resnet_18.fit(train_dataset, epochs=epochs, validation_data=validation_dataset)
+    results = resnet_18.evaluate(test_dataset, batch_size=batch_size)
+    print(f"Results after {epochs} epochs:")
+    print('crossentropy, top-1 accuracy, top-5 accuracy', results)
 
-    resnet_18.fit(train_dataset, epochs=5, validation_data=test_dataset)
 
-
-def load_ucf101():
+def load_ucf101(batch_size):
     autotune = tf.data.experimental.AUTOTUNE
     config = tfds.download.DownloadConfig(verify_ssl=False)
-    (train_dataset, test_dataset), ds_info = tfds.load("ucf101", split=['train', 'test'], with_info=True,
-                                                       shuffle_files=True, batch_size=10,
-                                                       download_and_prepare_kwargs={"download_config": config})
+    (train_dataset, validation_dataset, test_dataset), ds_info = tfds.load("ucf101", split=['train[:80%]',
+                                                                                            'train[80%:]', 'test'],
+                                                                           with_info=True, shuffle_files=True,
+                                                                           batch_size=batch_size,
+                                                                           download_and_prepare_kwargs={
+                                                                               "download_config": config})
+
     train_dataset = train_dataset.map(lambda sample: normalize_img(sample),
                                       num_parallel_calls=autotune)
     train_dataset = train_dataset.prefetch(autotune)
+
     test_dataset = test_dataset.map(lambda sample: normalize_img(sample),
                                     num_parallel_calls=autotune)
     test_dataset = test_dataset.prefetch(autotune)
-    return train_dataset, test_dataset, ds_info
+
+    validation_dataset = validation_dataset.map(lambda sample: normalize_img(sample),
+                                                num_parallel_calls=autotune)
+    validation_dataset = validation_dataset.prefetch(autotune)
+    return train_dataset, validation_dataset, test_dataset, ds_info
 
 
 def normalize_img(sample):
