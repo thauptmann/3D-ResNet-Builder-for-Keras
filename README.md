@@ -1,6 +1,6 @@
 # 3D-ResNet-for-Keras
 A module for creating 3D ResNets based on [1]. It contains convenient functions to build the popular ResNet architectures:
-ResNet-18, -34, -52, -102 and -152. It is also possible to create a customised network architecture.
+ResNet-18, -34, -52, -102 and -152. It is also possible to create  customised network architectures.
 
 ## Installation
 Install e.g. with:
