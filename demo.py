@@ -5,11 +5,16 @@ import tensorflow as tf
 
 def train_resnet():
     seed_value = 5
-    batch_size = 10
+    batch_size = 4
     epochs = 5
+    scale = 2
     tf.random.set_seed(seed_value)
     train_dataset, validation_dataset, test_dataset, info = load_ucf101(batch_size)
     input_shape = info.features['video'].shape
+    width = int(input_shape[1] / scale)
+    height = int(input_shape[2] / scale)
+    channels = input_shape[3]
+    input_shape = (None, height, width, channels)
     output_shape = info.features['label'].num_classes
 
     resnet_18 = three_d_resnet_builder.build_three_d_resnet_18(input_shape, output_shape, 'softmax')
@@ -37,25 +42,25 @@ def load_ucf101(batch_size):
                                                                            download_and_prepare_kwargs={
                                                                                "download_config": config})
 
-    train_dataset = train_dataset.map(lambda sample: normalize_img(sample),
+    train_dataset = train_dataset.map(lambda sample: preprocess_image(sample),
                                       num_parallel_calls=autotune)
     train_dataset = train_dataset.prefetch(autotune)
 
-    test_dataset = test_dataset.map(lambda sample: normalize_img(sample),
+    test_dataset = test_dataset.map(lambda sample: preprocess_image(sample),
                                     num_parallel_calls=autotune)
     test_dataset = test_dataset.prefetch(autotune)
 
-    validation_dataset = validation_dataset.map(lambda sample: normalize_img(sample),
+    validation_dataset = validation_dataset.map(lambda sample: preprocess_image(sample),
                                                 num_parallel_calls=autotune)
     validation_dataset = validation_dataset.prefetch(autotune)
     return train_dataset, validation_dataset, test_dataset, ds_info
 
 
-def normalize_img(sample):
-    video = sample['video']
-    """Normalizes images: `uint8` -> `float32`."""
-    video = tf.cast(video, tf.float32) / 255.
-    return video, sample['label']
+def preprocess_image(sample):
+    videos = sample['video']
+    videos = tf.map_fn(lambda x: tf.image.resize(x, (128, 128)), videos, fn_output_signature=tf.float32)
+    videos = tf.cast(videos, tf.float32) / 255.
+    return videos, sample['label']
 
 
 if __name__ == '__main__':

@@ -54,7 +54,7 @@ def build_three_d_resnet_50(input_shape, output_shape, output_activation, regula
                             squeeze_and_excitation=False):
     """Return a customizable resnet_50.
 
-    :param input_shape: The input shape of the network as (frames, height, width, channel)
+    :param input_shape: The input shape of the network as (frames, height, width, channels)
     :param output_shape: The output shape. Dependant on the task of the network.
     :param output_activation: Define the used output activation. Also depends on the task of the network.
     :param regularizer: Defines the regularizer to use. E.g. "l1" or "l2"
@@ -76,7 +76,7 @@ def build_three_d_resnet_102(input_shape, output_shape, output_activation, regul
     :param squeeze_and_excitation:Activate or deactivate SE-Paths.
     :return: The built ResNet-102
     """
-    return three_D_resnet.ThreeDConvolutionResNet(input_shape, output_shape, output_activation,(3, 4, 23, 3),
+    return three_D_resnet.ThreeDConvolutionResNet(input_shape, output_shape, output_activation, (3, 4, 23, 3),
                                                   regularizer, squeeze_and_excitation, use_bottleneck=True)
 
 
