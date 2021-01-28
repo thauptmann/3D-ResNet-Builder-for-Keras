@@ -1,12 +1,13 @@
 import three_d_resnet_builder
 import tensorflow_datasets as tfds
 import tensorflow as tf
+from tensorflow import keras
 
 
 def train_resnet():
     seed_value = 5
     batch_size = 7
-    epochs = 100
+    epochs = 20
     scale = 2
     number_of_frames = 100
     tf.random.set_seed(seed_value)
@@ -19,6 +20,7 @@ def train_resnet():
     input_shape = (None, height, width, channels)
     output_shape = info.features['label'].num_classes
 
+    early_stopping = keras.callbacks.EarlyStopping(patience=5)
     resnet_18 = three_d_resnet_builder.build_three_d_resnet_18(input_shape, output_shape, 'softmax')
     resnet_18.compile(
         optimizer=tf.keras.optimizers.Adam(0.001),
@@ -29,7 +31,7 @@ def train_resnet():
         ],
     )
 
-    resnet_18.fit(train_dataset, epochs=epochs, validation_data=validation_dataset)
+    resnet_18.fit(train_dataset, epochs=epochs, validation_data=validation_dataset,  callbacks=[early_stopping])
     results = resnet_18.evaluate(test_dataset, batch_size=batch_size)
     print(f"Results after {epochs} epochs:")
     print('crossentropy, top-1 accuracy, top-5 accuracy', results)
@@ -37,6 +39,7 @@ def train_resnet():
 
 def load_ucf101(batch_size, number_of_frames):
     autotune = tf.data.experimental.AUTOTUNE
+    buffer_size = 1000
     config = tfds.download.DownloadConfig(verify_ssl=False)
     (train_dataset, validation_dataset, test_dataset), ds_info = tfds.load("ucf101", split=['train[:80%]',
                                                                                             'train[80%:]', 'test'],
@@ -47,15 +50,17 @@ def load_ucf101(batch_size, number_of_frames):
 
     train_dataset = train_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
                                       num_parallel_calls=autotune)
+    train_dataset = train_dataset.shuffle(buffer_size, reshuffle_each_iteration=True)
     train_dataset = train_dataset.prefetch(autotune)
+
+    validation_dataset = validation_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
+                                                num_parallel_calls=autotune)
+    validation_dataset = validation_dataset.prefetch(autotune)
 
     test_dataset = test_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
                                     num_parallel_calls=autotune)
     test_dataset = test_dataset.prefetch(autotune)
 
-    validation_dataset = validation_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
-                                                num_parallel_calls=autotune)
-    validation_dataset = validation_dataset.prefetch(autotune)
     return train_dataset, validation_dataset, test_dataset, ds_info
 
 
