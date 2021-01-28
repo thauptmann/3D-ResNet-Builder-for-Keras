@@ -29,8 +29,6 @@ def train_resnet():
         ],
     )
 
-    for sample in train_dataset.take(1):
-        print(sample[0])
     resnet_18.fit(train_dataset, epochs=epochs, validation_data=validation_dataset)
     results = resnet_18.evaluate(test_dataset, batch_size=batch_size)
     print(f"Results after {epochs} epochs:")
