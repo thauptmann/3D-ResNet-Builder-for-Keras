@@ -6,7 +6,7 @@ from tensorflow import keras
 
 def train_resnet():
     seed_value = 5
-    batch_size = 7
+    batch_size = 15
     epochs = 20
     scale = 2
     number_of_frames = 100
