@@ -20,7 +20,7 @@ def train_resnet():
     input_shape = (None, height, width, channels)
     output_shape = info.features['label'].num_classes
 
-    early_stopping = keras.callbacks.EarlyStopping(patience=3)
+    early_stopping = keras.callbacks.EarlyStopping(patience=3, restore_best_weights=True)
     resnet_18 = three_d_resnet_builder.build_three_d_resnet_18(input_shape, output_shape, 'softmax')
     resnet_18.compile(
         optimizer=tf.keras.optimizers.Adam(0.001),
