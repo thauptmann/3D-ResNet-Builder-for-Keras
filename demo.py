@@ -39,7 +39,6 @@ def train_resnet():
 
 def load_ucf101(batch_size, number_of_frames):
     autotune = tf.data.experimental.AUTOTUNE
-    buffer_size = 1000
     config = tfds.download.DownloadConfig(verify_ssl=False)
     (train_dataset, validation_dataset, test_dataset), ds_info = tfds.load("ucf101", split=['train[:80%]',
                                                                                             'train[80%:]', 'test'],
@@ -48,7 +47,6 @@ def load_ucf101(batch_size, number_of_frames):
                                                                            download_and_prepare_kwargs={
                                                                                "download_config": config})
 
-    train_dataset = train_dataset.shuffle(buffer_size, reshuffle_each_iteration=True)
     train_dataset = train_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
                                       num_parallel_calls=autotune)
     train_dataset = train_dataset.prefetch(autotune)
