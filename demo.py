@@ -7,7 +7,7 @@ from tensorflow import keras
 def train_resnet():
     seed_value = 5
     batch_size = 15
-    epochs = 20
+    epochs = 50
     scale = 2
     number_of_frames = 100
     tf.random.set_seed(seed_value)
@@ -20,7 +20,7 @@ def train_resnet():
     input_shape = (None, height, width, channels)
     output_shape = info.features['label'].num_classes
 
-    early_stopping = keras.callbacks.EarlyStopping(patience=5)
+    early_stopping = keras.callbacks.EarlyStopping(patience=3)
     resnet_18 = three_d_resnet_builder.build_three_d_resnet_18(input_shape, output_shape, 'softmax')
     resnet_18.compile(
         optimizer=tf.keras.optimizers.Adam(0.001),
@@ -48,9 +48,9 @@ def load_ucf101(batch_size, number_of_frames):
                                                                            download_and_prepare_kwargs={
                                                                                "download_config": config})
 
+    train_dataset = train_dataset.shuffle(buffer_size, reshuffle_each_iteration=True)
     train_dataset = train_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
                                       num_parallel_calls=autotune)
-    train_dataset = train_dataset.shuffle(buffer_size, reshuffle_each_iteration=True)
     train_dataset = train_dataset.prefetch(autotune)
 
     validation_dataset = validation_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
