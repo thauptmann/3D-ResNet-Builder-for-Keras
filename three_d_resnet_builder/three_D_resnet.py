@@ -28,7 +28,7 @@ class ThreeDConvolutionResNet(keras.Model):
             residual_block = ResidualBlock
 
         resnet_head = keras.Sequential([
-            keras.layers.Input(input_shape),
+            keras.layers.InputLayer(input_shape),
             keras.layers.Conv3D(64, 7, 2, use_bias=False, kernel_regularizer=regularizer),
             keras.layers.BatchNormalization(),
             keras.layers.ReLU(),
