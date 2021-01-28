@@ -14,7 +14,8 @@ def train_resnet():
     input_shape = info.features['video'].shape
     width = int(input_shape[1] / scale)
     height = int(input_shape[2] / scale)
-    channels = input_shape[3]
+    # we convert the rgb images to gray scale
+    channels = 1
     input_shape = (None, height, width, channels)
     output_shape = info.features['label'].num_classes
 
