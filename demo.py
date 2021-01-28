@@ -5,12 +5,12 @@ import tensorflow as tf
 
 def train_resnet():
     seed_value = 5
-    batch_size = 4
-    epochs = 5
+    batch_size = 7
+    epochs = 100
     scale = 2
-    number_of_frames = 50
+    number_of_frames = 100
     tf.random.set_seed(seed_value)
-    train_dataset, validation_dataset, test_dataset, info = load_ucf101(batch_size)
+    train_dataset, validation_dataset, test_dataset, info = load_ucf101(batch_size, number_of_frames)
     input_shape = info.features['video'].shape
     width = int(input_shape[1] / scale)
     height = int(input_shape[2] / scale)
@@ -35,7 +35,7 @@ def train_resnet():
     print('crossentropy, top-1 accuracy, top-5 accuracy', results)
 
 
-def load_ucf101(batch_size):
+def load_ucf101(batch_size, number_of_frames):
     autotune = tf.data.experimental.AUTOTUNE
     config = tfds.download.DownloadConfig(verify_ssl=False)
     (train_dataset, validation_dataset, test_dataset), ds_info = tfds.load("ucf101", split=['train[:80%]',
@@ -45,26 +45,26 @@ def load_ucf101(batch_size):
                                                                            download_and_prepare_kwargs={
                                                                                "download_config": config})
 
-    train_dataset = train_dataset.map(lambda sample: preprocess_image(sample),
+    train_dataset = train_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
                                       num_parallel_calls=autotune)
     train_dataset = train_dataset.prefetch(autotune)
 
-    test_dataset = test_dataset.map(lambda sample: preprocess_image(sample),
+    test_dataset = test_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
                                     num_parallel_calls=autotune)
     test_dataset = test_dataset.prefetch(autotune)
 
-    validation_dataset = validation_dataset.map(lambda sample: preprocess_image(sample),
+    validation_dataset = validation_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
                                                 num_parallel_calls=autotune)
     validation_dataset = validation_dataset.prefetch(autotune)
     return train_dataset, validation_dataset, test_dataset, ds_info
 
 
-def preprocess_image(sample):
+def preprocess_image(sample, number_of_frames):
     videos = sample['video']
     videos = tf.map_fn(lambda x: tf.image.resize(x, (128, 128)), videos, fn_output_signature=tf.float32)
     converted_videos = tf.image.rgb_to_grayscale(videos)
     converted_videos = tf.cast(converted_videos, tf.float32) / 255.
-    return converted_videos, sample['label']
+    return converted_videos[: number_of_frames], sample['label']
 
 
 if __name__ == '__main__':
