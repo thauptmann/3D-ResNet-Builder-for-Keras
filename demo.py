@@ -29,6 +29,8 @@ def train_resnet():
         ],
     )
 
+    for sample in train_dataset.take(1):
+        print(sample[0])
     resnet_18.fit(train_dataset, epochs=epochs, validation_data=validation_dataset)
     results = resnet_18.evaluate(test_dataset, batch_size=batch_size)
     print(f"Results after {epochs} epochs:")
@@ -64,7 +66,7 @@ def preprocess_image(sample, number_of_frames):
     videos = tf.map_fn(lambda x: tf.image.resize(x, (128, 128)), videos, fn_output_signature=tf.float32)
     converted_videos = tf.image.rgb_to_grayscale(videos)
     converted_videos = tf.cast(converted_videos, tf.float32) / 255.
-    return converted_videos[: number_of_frames], sample['label']
+    return converted_videos[:, :number_of_frames], sample['label']
 
 
 if __name__ == '__main__':
