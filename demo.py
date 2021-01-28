@@ -7,7 +7,7 @@ from tensorflow import keras
 def train_resnet():
     seed_value = 5
     batch_size = 15
-    epochs = 50
+    epochs = 200
     scale = 2
     number_of_frames = 100
     tf.random.set_seed(seed_value)
@@ -20,7 +20,7 @@ def train_resnet():
     input_shape = (None, height, width, channels)
     output_shape = info.features['label'].num_classes
 
-    early_stopping = keras.callbacks.EarlyStopping(patience=3, restore_best_weights=True)
+    early_stopping = keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True)
     resnet_18 = three_d_resnet_builder.build_three_d_resnet_18(input_shape, output_shape, 'softmax')
     resnet_18.compile(
         optimizer=tf.keras.optimizers.Adam(0.001),
