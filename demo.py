@@ -8,6 +8,7 @@ def train_resnet():
     batch_size = 4
     epochs = 5
     scale = 2
+    number_of_frames = 50
     tf.random.set_seed(seed_value)
     train_dataset, validation_dataset, test_dataset, info = load_ucf101(batch_size)
     input_shape = info.features['video'].shape
@@ -26,6 +27,7 @@ def train_resnet():
             tf.keras.metrics.SparseTopKCategoricalAccuracy(k=5, name='top_5_accuracy'),
         ],
     )
+
     resnet_18.fit(train_dataset, epochs=epochs, validation_data=validation_dataset)
     results = resnet_18.evaluate(test_dataset, batch_size=batch_size)
     print(f"Results after {epochs} epochs:")
@@ -59,8 +61,9 @@ def load_ucf101(batch_size):
 def preprocess_image(sample):
     videos = sample['video']
     videos = tf.map_fn(lambda x: tf.image.resize(x, (128, 128)), videos, fn_output_signature=tf.float32)
-    videos = tf.cast(videos, tf.float32) / 255.
-    return videos, sample['label']
+    converted_videos = tf.image.rgb_to_grayscale(videos)
+    converted_videos = tf.cast(converted_videos, tf.float32) / 255.
+    return converted_videos, sample['label']
 
 
 if __name__ == '__main__':
