@@ -51,12 +51,12 @@ $ python demo.py
 
 ### Results
 
-| Model | Loss | Top-1 Accuracy | Top-5-Accuracy | Epochs |
-|---|---|---|---|---|
-|ResNet-18||||
-|ResNet-34||||
-|SE-ResNet-18||||
-|SE-ResNet-34||||
+| Model | Top-1 Accuracy | Top-5-Accuracy | Epochs |
+|---|---|---|---|
+|ResNet-18|30.76%|56.22%|47|
+|ResNet-34|||
+|SE-ResNet-18|||
+|SE-ResNet-34|||
 
 
 ---
