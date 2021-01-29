@@ -55,7 +55,7 @@ $ python demo.py
 |---|---|---|---|
 |ResNet-18|30.76%|56.22%|
 |ResNet-34|||
-|SE-ResNet-18|31.21%|56.83%|
+|SE-ResNet-18|31.22%|56.83%|
 |SE-ResNet-34|||
 
 
