@@ -52,7 +52,7 @@ $ python demo.py
 ### Results
 
 | Model | Top-1 Accuracy | Top-5-Accuracy |
-|---|---|---|---|
+|---|---|---|
 |ResNet-18|30.76%|56.22%|
 |SE-ResNet-18|31.22%|56.83%|
 
