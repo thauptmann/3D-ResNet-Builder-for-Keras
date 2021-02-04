@@ -35,7 +35,7 @@ three_d_resnet_builder.build_three_d_resnet(input_shape, output_shape, repetitio
 ## Demo
 For testing purposes I chose the Ucf101 dataset [3] to train on. It contains approximately 13.000 videos with 101 labels of different actions. The purpose of the demo is to show how to use the package, not to get the best results. Therefore important preprocessing steps (e.g. shuffling and data augmentation) are missing.
 
-**Caution:** this will download approximately 6.5 GiB and will run for several hours on a GPU. Without
+**Caveat:** This will download approximately 6.5 GiB and will run for several hours on a GPU. Without
 it, it  will probably crash. (Unfortunately I have not found a smaller and easier example dataset. I am open for advices.)
 
 For decoding the images *ffmpeg* needs to be installed:
