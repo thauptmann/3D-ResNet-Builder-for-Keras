@@ -1,5 +1,5 @@
 # 3D-ResNet-for-Keras
-A module for creating 3D ResNets based on [1]. It contains convenient functions to build the popular ResNet architectures:
+A module for creating 3D ResNets based on the work of He et al. [1]. It contains convenient functions to build the popular ResNet architectures:
 ResNet-18, -34, -52, -102 and -152. It is also possible to create  customised network architectures.
 
 ## Installation
@@ -33,9 +33,9 @@ three_d_resnet_builder.build_three_d_resnet(input_shape, output_shape, repetitio
 
 
 ## Demo
-For testing purpose I chose the Ucf101 dataset [3]. It contains around 13.000 videos with 101 labels of different actions.
+For testing purposes I chose the Ucf101 dataset [3] to train on. It contains approximately 13.000 videos with 101 labels of different actions. The purpose of the demo is to show how to use the package, not to get the best results. Therefore important preprocessing steps (e.g. shuffling and data augmentation) are missing.
 
-**But caution** this will download approximately 6.5 GiB and will run for a long time, even with a GPU. Without
+**Caveat:** This will download approximately 6.5 GiB and will run for several hours on a GPU. Without
 it, it  will probably crash. (Unfortunately I have not found a smaller and easier example dataset. I am open for advices.)
 
 For decoding the images *ffmpeg* needs to be installed:
@@ -49,14 +49,12 @@ $ python -m pip install -r requirements.txt
 $ python demo.py
 ~~~
 
-## Results
+### Results
 
-| Model | Loss | Top-1 Accuracy | Top-5-Accuracy |
-|---|---|---|---|
-|ResNet-18|||
-|ResNet-34|||
-|SE-ResNet-18|||
-|SE-ResNet-34|||
+| Model | Top-1 Accuracy | Top-5-Accuracy |
+|---|---|---|
+|ResNet-18|30.76%|56.22%|
+|SE-ResNet-18|31.22%|56.83%|
 
 
 ---

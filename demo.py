@@ -7,7 +7,7 @@ from tensorflow import keras
 def train_resnet():
     seed_value = 5
     batch_size = 15
-    epochs = 50
+    epochs = 200
     scale = 2
     number_of_frames = 100
     tf.random.set_seed(seed_value)
@@ -20,7 +20,7 @@ def train_resnet():
     input_shape = (None, height, width, channels)
     output_shape = info.features['label'].num_classes
 
-    early_stopping = keras.callbacks.EarlyStopping(patience=3)
+    early_stopping = keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True)
     resnet_18 = three_d_resnet_builder.build_three_d_resnet_18(input_shape, output_shape, 'softmax')
     resnet_18.compile(
         optimizer=tf.keras.optimizers.Adam(0.001),
@@ -39,7 +39,6 @@ def train_resnet():
 
 def load_ucf101(batch_size, number_of_frames):
     autotune = tf.data.experimental.AUTOTUNE
-    buffer_size = 1000
     config = tfds.download.DownloadConfig(verify_ssl=False)
     (train_dataset, validation_dataset, test_dataset), ds_info = tfds.load("ucf101", split=['train[:80%]',
                                                                                             'train[80%:]', 'test'],
@@ -48,7 +47,6 @@ def load_ucf101(batch_size, number_of_frames):
                                                                            download_and_prepare_kwargs={
                                                                                "download_config": config})
 
-    train_dataset = train_dataset.shuffle(buffer_size, reshuffle_each_iteration=True)
     train_dataset = train_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
                                       num_parallel_calls=autotune)
     train_dataset = train_dataset.prefetch(autotune)
