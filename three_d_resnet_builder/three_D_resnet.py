@@ -53,7 +53,7 @@ class ThreeDConvolutionResNet(keras.Model):
             [
                 keras.layers.GlobalAvgPool3D(),
                 keras.layers.Flatten(),
-                keras.layers.Dense(output_shape, activation=output_activation),
+                keras.layers.Dense(output_shape, activation=output_activation, kernel_regularizer=regularizer),
             ]
         )
         self.resnet = keras.Sequential([resnet_head, resnet_body, resnet_tail])
