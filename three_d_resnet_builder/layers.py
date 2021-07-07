@@ -21,7 +21,7 @@ class ResidualBlock(keras.layers.Layer):
     def __call__(self, inputs, training=None):
         intermediate_output = self.resnet_block(inputs, training=training)
         if self.squeeze_and_excitation:
-            weights = self.se_path(inputs, training=training)
+            weights = self.se_path(intermediate_output, training=training)
             intermediate_output = intermediate_output * weights
 
         output_sum = tf.add(intermediate_output, inputs)
@@ -56,7 +56,7 @@ class ResidualConvBlock(keras.layers.Layer):
         shortcut = self.shortcut_conv(inputs, training=training)
 
         if self.squeeze_and_excitation:
-            weights = self.se_path(inputs, training=training)
+            weights = self.se_path(intermediate_output, training=training)
             intermediate_output = intermediate_output * weights
 
         output_sum = tf.add(intermediate_output, shortcut)
@@ -84,7 +84,7 @@ class ResidualBottleneckBlock(keras.layers.Layer):
         intermediate_output = self.resnet_bottleneck_block(inputs, training=training)
 
         if self.squeeze_and_excitation:
-            weights = self.se_path(inputs, training=training)
+            weights = self.se_path(intermediate_output, training=training)
             intermediate_output = intermediate_output * weights
 
         output_sum = tf.add(intermediate_output, inputs)
@@ -118,7 +118,7 @@ class ResidualConvBottleneckBlock(keras.layers.Layer):
         shortcut = self.shortcut_conv(inputs, training=training)
 
         if self.squeeze_and_excitation:
-            weights = self.se_path(inputs)
+            weights = self.se_path(intermediate_output, training=training)
             intermediate_output = intermediate_output * weights
 
         output_sum = tf.add(intermediate_output, shortcut)
