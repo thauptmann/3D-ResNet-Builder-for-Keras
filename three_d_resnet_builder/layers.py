@@ -18,11 +18,10 @@ class ResidualBlock(keras.layers.Layer):
         if self.squeeze_and_excitation:
             self.se_path = SqueezeAndExcitationPath(kernel_number)
 
-    def call(self, inputs, training=None):
-        intermediate_output = self.resnet_block(inputs)
-
+    def __call__(self, inputs, training=None):
+        intermediate_output = self.resnet_block(inputs, training=training)
         if self.squeeze_and_excitation:
-            weights = self.se_path(inputs)
+            weights = self.se_path(inputs, training=training)
             intermediate_output = intermediate_output * weights
 
         output_sum = tf.add(intermediate_output, inputs)
@@ -53,11 +52,11 @@ class ResidualConvBlock(keras.layers.Layer):
             self.se_path = SqueezeAndExcitationPath(kernel_number)
 
     def call(self, inputs, training=None):
-        intermediate_output = self.resnet_conv_block(inputs)
-        shortcut = self.shortcut_conv(inputs)
+        intermediate_output = self.resnet_conv_block(inputs, training=training)
+        shortcut = self.shortcut_conv(inputs, training=training)
 
         if self.squeeze_and_excitation:
-            weights = self.se_path(inputs)
+            weights = self.se_path(inputs, training=training)
             intermediate_output = intermediate_output * weights
 
         output_sum = tf.add(intermediate_output, shortcut)
@@ -82,10 +81,10 @@ class ResidualBottleneckBlock(keras.layers.Layer):
             self.se_path = SqueezeAndExcitationPath(kernel_number * 4)
 
     def call(self, inputs, training=None, **kwargs):
-        intermediate_output = self.resnet_bottleneck_block(inputs)
+        intermediate_output = self.resnet_bottleneck_block(inputs, training=training)
 
         if self.squeeze_and_excitation:
-            weights = self.se_path(inputs)
+            weights = self.se_path(inputs, training=training)
             intermediate_output = intermediate_output * weights
 
         output_sum = tf.add(intermediate_output, inputs)
@@ -114,9 +113,9 @@ class ResidualConvBottleneckBlock(keras.layers.Layer):
         if self.squeeze_and_excitation:
             self.se_path = SqueezeAndExcitationPath(kernel_number * 4)
 
-    def call(self, inputs, training=None, **kwargs):
-        intermediate_output = self.resnet_conv_bottleneck_block(inputs)
-        shortcut = self.shortcut_conv(inputs)
+    def call(self, inputs, training=None):
+        intermediate_output = self.resnet_conv_bottleneck_block(inputs, training=training)
+        shortcut = self.shortcut_conv(inputs, training=training)
 
         if self.squeeze_and_excitation:
             weights = self.se_path(inputs)
@@ -140,8 +139,8 @@ class SqueezeAndExcitationPath(keras.layers.Layer):
             ]
         )
 
-    def call(self, inputs, training=None, **kwargs):
-        weights = self.se_path(inputs)
+    def __call__(self, inputs, training=None):
+        weights = self.se_path(inputs, training=training)
         reshaped_weights = tf.reshape(weights, (-1, 1, 1, 1, self.channel))
         return reshaped_weights
 
@@ -161,4 +160,4 @@ class CustomConv3D(keras.layers.Layer):
         self.custom_conv_3d.add(keras.layers.ReLU())
 
     def call(self, inputs, training=None):
-        return self.custom_conv_3d(inputs)
+        return self.custom_conv_3d(inputs, training=training)
