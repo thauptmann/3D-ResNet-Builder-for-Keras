@@ -5,7 +5,7 @@ from tensorflow import keras
 import argparse
 
 
-def train_resnet(use_squeeze_and_excitation, kernel_type):
+def train_resnet(use_squeeze_and_excitation, depth, kernel_type):
     seed_value = 5
     batch_size = 15
     epochs = 200
@@ -22,9 +22,9 @@ def train_resnet(use_squeeze_and_excitation, kernel_type):
     output_shape = info.features['label'].num_classes
 
     early_stopping = keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True)
-    resnet_18 = three_d_resnet_builder.build_three_d_resnet_34(input_shape, output_shape, 'softmax',
-                                                               use_squeeze_and_excitation)
-    resnet_18.compile(
+    resnet = generate_network_architecture(depth, input_shape, output_shape, use_squeeze_and_excitation)
+
+    resnet.compile(
         optimizer=tf.keras.optimizers.Adam(0.001),
         loss=tf.keras.losses.SparseCategoricalCrossentropy(),
         metrics=[
@@ -33,10 +33,29 @@ def train_resnet(use_squeeze_and_excitation, kernel_type):
         ],
     )
 
-    resnet_18.fit(train_dataset, epochs=epochs, validation_data=validation_dataset,  callbacks=[early_stopping])
-    results = resnet_18.evaluate(test_dataset, batch_size=batch_size)
+    resnet.fit(train_dataset, epochs=epochs, validation_data=validation_dataset, callbacks=[early_stopping])
+    results = resnet.evaluate(test_dataset, batch_size=batch_size)
     print(f"Results after {epochs} epochs:")
     print('Cross entropy, top-1 accuracy, top-5 accuracy', results)
+
+
+def generate_network_architecture(depth, input_shape, output_shape, use_squeeze_and_excitation):
+    if depth == 34:
+        resnet = three_d_resnet_builder.build_three_d_resnet_34(input_shape, output_shape, 'softmax',
+                                                                use_squeeze_and_excitation)
+    elif depth == 50:
+        resnet = three_d_resnet_builder.build_three_d_resnet_50(input_shape, output_shape, 'softmax',
+                                                                use_squeeze_and_excitation)
+    elif depth == 102:
+        resnet = three_d_resnet_builder.build_three_d_resnet_102(input_shape, output_shape, 'softmax',
+                                                                 use_squeeze_and_excitation)
+    elif depth == 152:
+        resnet = three_d_resnet_builder.build_three_d_resnet_152(input_shape, output_shape, 'softmax',
+                                                                 use_squeeze_and_excitation)
+    else:
+        resnet = three_d_resnet_builder.build_three_d_resnet_18(input_shape, output_shape, 'softmax',
+                                                                use_squeeze_and_excitation)
+    return resnet
 
 
 def load_ucf101(batch_size, number_of_frames):
@@ -75,5 +94,6 @@ def preprocess_image(sample, number_of_frames):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--use_squeeze_and_excitation', action=argparse.BooleanOptionalAction)
+    parser.add_argument('--depth', default=18, type=int, choices=[19, 34, 50, 102, 152])
     args = parser.parse_args()
-    train_resnet(args.use_squeeze_and_excitation, None)
+    train_resnet(args.use_squeeze_and_excitation, args.depth, None)
