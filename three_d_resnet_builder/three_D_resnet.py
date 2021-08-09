@@ -1,5 +1,6 @@
 from tensorflow import keras
 from keras import layers
+
 from .layers import ResidualBlock, ResidualBottleneckBlock, ResidualConvBlock, ResidualConvBottleneckBlock
 
 
@@ -8,7 +9,7 @@ class ThreeDConvolutionResNet(keras.Model):
 
     """
     def __init__(self, input_shape, output_shape, output_activation, repetitions, regularizer=None,
-                 squeeze_and_excitation=False, use_bottleneck=False, kernel_size=3):
+                 squeeze_and_excitation=False, use_bottleneck=False, kernel_size=3, kernel=None):
         """Build the desired network.
 
         :param input_shape:
@@ -30,7 +31,7 @@ class ThreeDConvolutionResNet(keras.Model):
 
         resnet_head = keras.Sequential([
             layers.InputLayer(input_shape),
-            layers.Conv3D(64, 7, 2, use_bias=False, kernel_regularizer=regularizer),
+            kernel(64, 7, 2, use_bias=False, kernel_regularizer=regularizer),
             layers.BatchNormalization(),
             layers.ReLU(),
             layers.MaxPool3D(3, 2)])
@@ -42,10 +43,11 @@ class ThreeDConvolutionResNet(keras.Model):
             for i in range(repetition):
                 if i == 0:
                     resnet_body.add(residual_conv_block(kernel_number, kernel_size, regularizer,
-                                                        squeeze_and_excitation=squeeze_and_excitation, strides=strides))
+                                                        squeeze_and_excitation=squeeze_and_excitation, strides=strides,
+                                                        kernel_type=kernel))
                 else:
                     resnet_body.add(residual_block(kernel_number, kernel_size, regularizer,
-                                                   squeeze_and_excitation))
+                                                   squeeze_and_excitation, kernel_type=kernel))
                 strides = 2
             kernel_number *= 2
 

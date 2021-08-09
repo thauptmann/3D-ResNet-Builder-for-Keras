@@ -5,11 +5,10 @@ from tensorflow import keras
 import argparse
 from tensorflow.keras import mixed_precision
 
-
 mixed_precision.set_global_policy('mixed_float16')
 
 
-def train_resnet(use_squeeze_and_excitation, depth, kernel_type):
+def train_resnet(use_squeeze_and_excitation, depth, kernel_name):
     seed_value = 5
     batch_size = 16
     epochs = 200
@@ -26,7 +25,7 @@ def train_resnet(use_squeeze_and_excitation, depth, kernel_type):
     output_shape = info.features['label'].num_classes
 
     early_stopping = keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True)
-    resnet = generate_network_architecture(depth, input_shape, output_shape, use_squeeze_and_excitation)
+    resnet = generate_network_architecture(depth, input_shape, output_shape, use_squeeze_and_excitation, kernel_name)
 
     resnet.compile(
         optimizer=tf.keras.optimizers.Adam(0.001),
@@ -43,22 +42,27 @@ def train_resnet(use_squeeze_and_excitation, depth, kernel_type):
     print('Cross entropy, top-1 accuracy, top-5 accuracy', results)
 
 
-def generate_network_architecture(depth, input_shape, output_shape, use_squeeze_and_excitation):
+def generate_network_architecture(depth, input_shape, output_shape, use_squeeze_and_excitation, kernel_name):
     if depth == 34:
         resnet = three_d_resnet_builder.build_three_d_resnet_34(input_shape, output_shape, 'softmax', 'l2',
-                                                                squeeze_and_excitation=use_squeeze_and_excitation)
+                                                                squeeze_and_excitation=use_squeeze_and_excitation,
+                                                                kernel_name=kernel_name)
     elif depth == 50:
         resnet = three_d_resnet_builder.build_three_d_resnet_50(input_shape, output_shape, 'softmax', 'l2',
-                                                                squeeze_and_excitation=use_squeeze_and_excitation)
+                                                                squeeze_and_excitation=use_squeeze_and_excitation,
+                                                                kernel_name=kernel_name)
     elif depth == 102:
         resnet = three_d_resnet_builder.build_three_d_resnet_102(input_shape, output_shape, 'softmax', 'l2',
-                                                                 squeeze_and_excitation=use_squeeze_and_excitation)
+                                                                 squeeze_and_excitation=use_squeeze_and_excitation,
+                                                                 kernel_name=kernel_name)
     elif depth == 152:
         resnet = three_d_resnet_builder.build_three_d_resnet_152(input_shape, output_shape, 'softmax', 'l2',
-                                                                 squeeze_and_excitation=use_squeeze_and_excitation)
+                                                                 squeeze_and_excitation=use_squeeze_and_excitation,
+                                                                 kernel_name=kernel_name)
     else:
         resnet = three_d_resnet_builder.build_three_d_resnet_18(input_shape, output_shape, 'softmax', 'l2',
-                                                                squeeze_and_excitation=use_squeeze_and_excitation)
+                                                                squeeze_and_excitation=use_squeeze_and_excitation,
+                                                                kernel_name=kernel_name)
     return resnet
 
 
@@ -99,5 +103,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--use_squeeze_and_excitation', action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument('--depth', default=18, type=int, choices=[18, 34, 50, 102, 152])
+    parser.add_argument('--kernel', default='3D', choices=['3D', '(2+1)D', 'P3D-B', 'FAST', 'split-FAST'])
     args = parser.parse_args()
-    train_resnet(args.use_squeeze_and_excitation, args.depth, None)
+    train_resnet(args.use_squeeze_and_excitation, args.depth, args.kernel)

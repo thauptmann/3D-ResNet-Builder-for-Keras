@@ -12,7 +12,7 @@ class ResidualBlock(keras.layers.Layer):
                 Conv3DBlock(kernel_number, kernel_size, regularizer, 1, padding='same', use_bn=True,
                             kernel_type=kernel_type),
                 kernel_type(kernel_number, kernel_size, padding='same', use_bias=False,
-                                    kernel_regularizer=regularizer),
+                            kernel_regularizer=regularizer),
                 keras.layers.BatchNormalization()
             ]
         )
@@ -41,7 +41,7 @@ class ResidualConvBlock(keras.layers.Layer):
                 Conv3DBlock(kernel_number, kernel_size, regularizer, strides=strides, padding='same', use_bn=True,
                             kernel_type=kernel_type),
                 kernel_type(kernel_number, kernel_size, padding='same', use_bias=False,
-                                    kernel_regularizer=keras.regularizers.l2()),
+                            kernel_regularizer=keras.regularizers.l2()),
                 keras.layers.BatchNormalization()
             ]
         )
@@ -157,15 +157,16 @@ class Conv3DBlock(keras.layers.Layer):
     """
     Convenient layer to create Conv3D -> Batch Normalization -> ReLU blocks faster
     """
+
     def __init__(self, kernel_number, kernel_size, regularizer=None, strides=1, use_bn=False, padding='valid',
-                 kernel_type=None, **kwargs):
+                 **kwargs):
         super(Conv3DBlock, self).__init__(**kwargs)
         self.custom_conv_3d = keras.Sequential()
-        self.custom_conv_3d.add(kernel_type(kernel_number, kernel_size, strides, padding=padding,
+        self.custom_conv_3d.add(keras.layers.Conv3D(kernel_number, kernel_size, strides, padding=padding,
                                                     use_bias=not use_bn, kernel_regularizer=regularizer))
         if use_bn:
             self.custom_conv_3d.add(keras.layers.BatchNormalization())
         self.custom_conv_3d.add(keras.layers.ReLU())
 
-    def call(self, inputs, training=None):
+    def __call__(self, inputs, training=None):
         return self.custom_conv_3d(inputs, training=training)
