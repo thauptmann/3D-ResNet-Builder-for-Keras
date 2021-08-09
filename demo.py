@@ -98,6 +98,6 @@ def preprocess_image(sample, number_of_frames):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--use_squeeze_and_excitation', action=argparse.BooleanOptionalAction)
-    parser.add_argument('--depth', default=18, type=int, choices=[19, 34, 50, 102, 152])
+    parser.add_argument('--depth', default=18, type=int, choices=[18, 34, 50, 102, 152])
     args = parser.parse_args()
     train_resnet(args.use_squeeze_and_excitation, args.depth, None)
