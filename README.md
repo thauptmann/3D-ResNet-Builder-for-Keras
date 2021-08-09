@@ -67,4 +67,5 @@ $ python demo.py
 
 [4] *D. Tran, H. Wang, L. Torresani, J. Ray, Y. LeCun, and M. Paluri. A closer look at spatiotemporal convolutions for action recognition. In Conference on Computer Vision and Pattern Recognition (CVPR), pages 6450–6459. (IEEE), 2018.* 
 [5] *Z. Qiu, T. Yao, and T. Mei. Learning spatio-temporal representation with pseudo-3d residual networks. In International Conference on Computer Vision (ICCV), pages 5534–5542. (IEEE), 2017.*
+
 [6] *A. Stergiou and R. Poppe, “Spatio-Temporal FAST 3D Convolutions for Human Action Recognition,” presented at the 2019 18th IEEE International Conference On Machine Learning And Applications (ICMLA), Dec. 2019. doi: 10.1109/icmla.2019.00036.*
