@@ -64,3 +64,7 @@ $ python demo.py
 [2] *J. Hu, L. Shen and G. Sun, "Squeeze-and-Excitation Networks," 2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition, Salt Lake City, UT, 2018, pp. 7132-7141, doi: 10.1109/CVPR.2018.00745.*
 
 [3] *K. Soomro, A. Roshan Zamir and M. Shah, "UCF101: A Dataset of 101 Human Action Classes From Videos in The Wild", CRCV-TR-12-01, November, 2012.*
+
+[4] *D. Tran, H. Wang, L. Torresani, J. Ray, Y. LeCun, and M. Paluri. A closer look at spatiotemporal convolutions for action recognition. In Conference on Computer Vision and Pattern Recognition (CVPR), pages 6450–6459. (IEEE), 2018.* 
+[5] *Z. Qiu, T. Yao, and T. Mei. Learning spatio-temporal representation with pseudo-3d residual networks. In International Conference on Computer Vision (ICCV), pages 5534–5542. (IEEE), 2017.*
+[6] *A. Stergiou and R. Poppe, “Spatio-Temporal FAST 3D Convolutions for Human Action Recognition,” presented at the 2019 18th IEEE International Conference On Machine Learning And Applications (ICMLA), Dec. 2019. doi: 10.1109/icmla.2019.00036.*
