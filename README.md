@@ -21,16 +21,19 @@ The input shape has to be (frames, height, width, channels)
 
 ~~~python
 three_d_resnet_builder.build_three_d_resnet_18(input_shape, output_shape, activation_function, regularizer,
-                                               squeeze_and_excitation)
+                                               squeeze_and_excitation, kernel_name)
 ~~~
 
 
 The general function (*build_three_d_resnet*) allows it to change the architecture of the network:
 ~~~python
 three_d_resnet_builder.build_three_d_resnet(input_shape, output_shape, repetitions, output_activation, regularizer, squeeze_and_excitation,
-                     use_bottleneck, kernel_size)
+                     use_bottleneck, kernel_size, kernel_name)
 ~~~
 
+
+## Kernel
+The package contains different types of kernel. The type can be with help of the *kernel_name* variable in the build function. Possible kernels are: 3D, (2+1)D, P3D-B, FAST, split-FAST
 
 ## Demo
 For testing purposes I chose the Ucf101 dataset [3] to train on. It contains approximately 13.000 videos with 101 labels of different actions. The purpose of the demo is to show how to use the package, not to get the best results. Therefore important preprocessing steps (e.g. shuffling and data augmentation) are missing.
