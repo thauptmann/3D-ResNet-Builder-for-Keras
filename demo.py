@@ -2,9 +2,10 @@ import three_d_resnet_builder
 import tensorflow_datasets as tfds
 import tensorflow as tf
 from tensorflow import keras
+import argparse
 
 
-def train_resnet():
+def train_resnet(use_squeeze_and_excitation, kernel_type):
     seed_value = 5
     batch_size = 15
     epochs = 200
@@ -21,7 +22,8 @@ def train_resnet():
     output_shape = info.features['label'].num_classes
 
     early_stopping = keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True)
-    resnet_18 = three_d_resnet_builder.build_three_d_resnet_18(input_shape, output_shape, 'softmax')
+    resnet_18 = three_d_resnet_builder.build_three_d_resnet_34(input_shape, output_shape, 'softmax',
+                                                               use_squeeze_and_excitation)
     resnet_18.compile(
         optimizer=tf.keras.optimizers.Adam(0.001),
         loss=tf.keras.losses.SparseCategoricalCrossentropy(),
@@ -34,11 +36,11 @@ def train_resnet():
     resnet_18.fit(train_dataset, epochs=epochs, validation_data=validation_dataset,  callbacks=[early_stopping])
     results = resnet_18.evaluate(test_dataset, batch_size=batch_size)
     print(f"Results after {epochs} epochs:")
-    print('crossentropy, top-1 accuracy, top-5 accuracy', results)
+    print('Cross entropy, top-1 accuracy, top-5 accuracy', results)
 
 
 def load_ucf101(batch_size, number_of_frames):
-    autotune = tf.data.experimental.AUTOTUNE
+    auto_tune = tf.data.experimental.AUTOTUNE
     config = tfds.download.DownloadConfig(verify_ssl=False)
     (train_dataset, validation_dataset, test_dataset), ds_info = tfds.load("ucf101", split=['train[:80%]',
                                                                                             'train[80%:]', 'test'],
@@ -48,15 +50,15 @@ def load_ucf101(batch_size, number_of_frames):
                                                                                "download_config": config})
 
     train_dataset = train_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
-                                      num_parallel_calls=autotune)
+                                      num_parallel_calls=auto_tune)
     train_dataset = train_dataset.prefetch(autotune)
 
     validation_dataset = validation_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
-                                                num_parallel_calls=autotune)
+                                                num_parallel_calls=auto_tune)
     validation_dataset = validation_dataset.prefetch(autotune)
 
     test_dataset = test_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
-                                    num_parallel_calls=autotune)
+                                    num_parallel_calls=auto_tune)
     test_dataset = test_dataset.prefetch(autotune)
 
     return train_dataset, validation_dataset, test_dataset, ds_info
@@ -71,4 +73,7 @@ def preprocess_image(sample, number_of_frames):
 
 
 if __name__ == '__main__':
-    train_resnet()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--use_squeeze_and_excitation', action=argparse.BooleanOptionalAction)
+    parser.parse_args(['--no-use_squeeze_and_excitation'])
+    train_resnet(parser.use_squeeze_and_excitation, None)
