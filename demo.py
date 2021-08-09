@@ -51,15 +51,15 @@ def load_ucf101(batch_size, number_of_frames):
 
     train_dataset = train_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
                                       num_parallel_calls=auto_tune)
-    train_dataset = train_dataset.prefetch(autotune)
+    train_dataset = train_dataset.prefetch(auto_tune)
 
     validation_dataset = validation_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
                                                 num_parallel_calls=auto_tune)
-    validation_dataset = validation_dataset.prefetch(autotune)
+    validation_dataset = validation_dataset.prefetch(auto_tune)
 
     test_dataset = test_dataset.map(lambda sample: preprocess_image(sample, number_of_frames),
                                     num_parallel_calls=auto_tune)
-    test_dataset = test_dataset.prefetch(autotune)
+    test_dataset = test_dataset.prefetch(auto_tune)
 
     return train_dataset, validation_dataset, test_dataset, ds_info
 
@@ -75,5 +75,5 @@ def preprocess_image(sample, number_of_frames):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--use_squeeze_and_excitation', action=argparse.BooleanOptionalAction)
-    parser.parse_args(['--no-use_squeeze_and_excitation'])
-    train_resnet(parser.use_squeeze_and_excitation, None)
+    args = parser.parse_args()
+    train_resnet(args.use_squeeze_and_excitation, None)
