@@ -33,7 +33,7 @@ three_d_resnet_builder.build_three_d_resnet(input_shape, output_shape, repetitio
 
 
 ## Kernel
-The package contains different types of kernel. The type can be with help of the *kernel_name* variable in the build function. Possible kernels are: 3D, (2+1)D, P3D-B, FAST, split-FAST
+The package contains different types of kernel. The type can be with help of the *kernel_name* variable in the build function. Possible kernels are: 3D, (2+1)D[4], P3D-B[5], FAST[6], split-FAST[6].
 
 ## Demo
 For testing purposes I chose the Ucf101 dataset [3] to train on. It contains approximately 13.000 videos with 101 labels of different actions. The purpose of the demo is to show how to use the package, not to get the best results. Therefore important preprocessing steps (e.g. shuffling and data augmentation) are missing.
@@ -69,6 +69,7 @@ $ python demo.py
 [3] *K. Soomro, A. Roshan Zamir and M. Shah, "UCF101: A Dataset of 101 Human Action Classes From Videos in The Wild", CRCV-TR-12-01, November, 2012.*
 
 [4] *D. Tran, H. Wang, L. Torresani, J. Ray, Y. LeCun, and M. Paluri. A closer look at spatiotemporal convolutions for action recognition. In Conference on Computer Vision and Pattern Recognition (CVPR), pages 6450–6459. (IEEE), 2018.* 
+
 [5] *Z. Qiu, T. Yao, and T. Mei. Learning spatio-temporal representation with pseudo-3d residual networks. In International Conference on Computer Vision (ICCV), pages 5534–5542. (IEEE), 2017.*
 
 [6] *A. Stergiou and R. Poppe, “Spatio-Temporal FAST 3D Convolutions for Human Action Recognition,” presented at the 2019 18th IEEE International Conference On Machine Learning And Applications (ICMLA), Dec. 2019. doi: 10.1109/icmla.2019.00036.*
