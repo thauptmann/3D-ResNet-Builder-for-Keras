@@ -1,4 +1,5 @@
 from tensorflow import keras
+from keras import layers
 from .layers import ResidualBlock, ResidualBottleneckBlock, ResidualConvBlock, ResidualConvBottleneckBlock
 
 
@@ -28,11 +29,11 @@ class ThreeDConvolutionResNet(keras.Model):
             residual_block = ResidualBlock
 
         resnet_head = keras.Sequential([
-            keras.layers.InputLayer(input_shape),
-            keras.layers.Conv3D(64, 7, 2, use_bias=False, kernel_regularizer=regularizer),
-            keras.layers.BatchNormalization(),
-            keras.layers.ReLU(),
-            keras.layers.MaxPool3D(3, 2)])
+            layers.InputLayer(input_shape),
+            layers.Conv3D(64, 7, 2, use_bias=False, kernel_regularizer=regularizer),
+            layers.BatchNormalization(),
+            layers.ReLU(),
+            layers.MaxPool3D(3, 2)])
 
         resnet_body = keras.Sequential()
         strides = 1
@@ -51,9 +52,10 @@ class ThreeDConvolutionResNet(keras.Model):
         # fix resnet tail
         resnet_tail = keras.Sequential(
             [
-                keras.layers.GlobalAvgPool3D(),
-                keras.layers.Flatten(),
-                keras.layers.Dense(output_shape, activation=output_activation, kernel_regularizer=regularizer),
+                layers.GlobalAvgPool3D(),
+                layers.Flatten(),
+                layers.Dense(output_shape, kernel_regularizer=regularizer),
+                layers.Activation(output_activation, dtype='float32')
             ]
         )
         self.resnet = keras.Sequential([resnet_head, resnet_body, resnet_tail])

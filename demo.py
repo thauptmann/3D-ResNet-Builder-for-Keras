@@ -3,11 +3,15 @@ import tensorflow_datasets as tfds
 import tensorflow as tf
 from tensorflow import keras
 import argparse
+from tensorflow.keras import mixed_precision
+
+
+mixed_precision.set_global_policy('mixed_float16')
 
 
 def train_resnet(use_squeeze_and_excitation, depth, kernel_type):
     seed_value = 5
-    batch_size = 15
+    batch_size = 24
     epochs = 200
     scale = 2
     number_of_frames = 100
