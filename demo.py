@@ -88,6 +88,7 @@ def load_ucf101(batch_size, number_of_frames):
     return train_dataset, validation_dataset, test_dataset, ds_info
 
 
+@tf.function
 def preprocess_image(sample, number_of_frames):
     videos = sample['video']
     videos = tf.map_fn(lambda x: tf.image.resize(x, (128, 128)), videos, fn_output_signature=tf.float32)
