@@ -11,8 +11,8 @@ class TwoPlusOneD(keras.layers.Layer):
         self.one = Conv3DBlock(kernel_number, (kernel_size, 1, 1), kernel_regularizer, strides, use_bn, padding)
 
     def __call__(self, inputs, training=None):
-        intermediate_output = self.two(inputs)
-        return self.one(intermediate_output)
+        intermediate_output = self.two(inputs, training=training)
+        return self.one(intermediate_output, training=training)
 
 
 class PThreeDMinusB(keras.layers.Layer):
@@ -23,8 +23,8 @@ class PThreeDMinusB(keras.layers.Layer):
         self.right = Conv3DBlock(kernel_number, (kernel_size, 1, 1), kernel_regularizer, strides, use_bn, padding)
 
     def __call__(self, inputs, training=None):
-        left_output = self.left(inputs)
-        right_output = self.right(inputs)
+        left_output = self.left(inputs, training=training)
+        right_output = self.right(inputs, training=training)
         return tf.math.add(left_output, right_output)
 
 
@@ -39,9 +39,9 @@ class FAST(keras.layers.Layer):
                               padding)
 
     def __call__(self, inputs, training=None):
-        intermediate_output = self.xy(inputs)
-        intermediate_output = self.xt(intermediate_output)
-        return self.yt(intermediate_output)
+        intermediate_output = self.xy(inputs, training=training)
+        intermediate_output = self.xt(intermediate_output, training=training)
+        return self.yt(intermediate_output, training=training)
 
 
 class SplitFAST(tf.keras.layers.Layer):
@@ -55,9 +55,9 @@ class SplitFAST(tf.keras.layers.Layer):
                               padding)
 
     def __call__(self, inputs, training=None):
-        intermediate_output = self.xy(inputs)
-        left_output = self.xy(intermediate_output)
-        right_output = self.xt(intermediate_output)
+        intermediate_output = self.xy(inputs, training=training)
+        left_output = self.xy(intermediate_output, training=training)
+        right_output = self.xt(intermediate_output, training=training)
         return tf.math.add(left_output, right_output)
 
 
@@ -68,7 +68,7 @@ class ThreeD(keras.layers.Layer):
                                    kernel_regularizer, strides, use_bn, padding)
 
     def __call__(self, inputs, training=None):
-        return self.three_d(inputs)
+        return self.three_d(inputs, training=training)
 
 
 def get_kernel_to_name(kernel_type):

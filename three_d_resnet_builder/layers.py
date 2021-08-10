@@ -9,7 +9,8 @@ class ResidualBlock(keras.layers.Layer):
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_block = keras.Sequential(
             [
-                kernel_type(kernel_number, kernel_size, strides, padding='same', use_bn=True, kernel_regularizer=regularizer),
+                kernel_type(kernel_number, kernel_size, strides, padding='same', use_bn=True,
+                            kernel_regularizer=regularizer),
                 kernel_type(kernel_number, kernel_size, strides, padding='same', use_bn=False,
                             kernel_regularizer=regularizer),
                 keras.layers.BatchNormalization()
