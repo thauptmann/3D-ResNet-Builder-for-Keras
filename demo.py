@@ -25,11 +25,11 @@ def train_resnet(use_squeeze_and_excitation, depth, kernel_name, batch_size, num
     resnet = generate_network_architecture(depth, input_shape, output_shape, use_squeeze_and_excitation, kernel_name)
 
     resnet.compile(
-        optimizer=tf.keras.optimizers.Adam(0.001),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+        optimizer=keras.optimizers.Adam(0.001),
+        loss=keras.losses.SparseCategoricalCrossentropy(),
         metrics=[
-            tf.keras.metrics.SparseTopKCategoricalAccuracy(k=1, name='top_1_accuracy'),
-            tf.keras.metrics.SparseTopKCategoricalAccuracy(k=5, name='top_5_accuracy'),
+            keras.metrics.SparseTopKCategoricalAccuracy(k=1, name='top_1_accuracy'),
+            keras.metrics.SparseTopKCategoricalAccuracy(k=5, name='top_5_accuracy'),
         ],
     )
 
