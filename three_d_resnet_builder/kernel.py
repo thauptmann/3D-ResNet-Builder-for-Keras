@@ -3,8 +3,10 @@ from tensorflow import keras
 from .layers import Conv3DBlock
 
 
-class ThreeDBaseKernel:
-    def __init__(self, kernel_number, kernel_size, strides, padding='valid', use_bn=True, kernel_regularizer=None):
+class ThreeDBaseKernel(keras.layers.Layer):
+    def __init__(self, kernel_number, kernel_size, strides, padding='valid', use_bn=True, kernel_regularizer=None,
+                 **kwargs):
+        super(ThreeDBaseKernel, self).__init__(**kwargs)
         self.kernel_number = kernel_number
         self.kernel_size = kernel_size
         self.strides = strides

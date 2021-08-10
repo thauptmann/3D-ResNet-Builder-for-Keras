@@ -37,18 +37,18 @@ class ResidualConvBlock(keras.layers.Layer):
         super(ResidualConvBlock, self).__init__(**kwargs)
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_conv_block = keras.Sequential(
-            [
-                Conv3DBlock(kernel_number, kernel_size, regularizer, strides=strides, padding='same', use_bn=True,
-                            kernel_type=kernel_type),
-                kernel_type(kernel_number, kernel_size, padding='same', use_bias=False,
-                            kernel_regularizer=keras.regularizers.l2()),
+            {
+                kernel_type(kernel_number, kernel_size, strides=strides, padding='same', use_bn=True,
+                            kernel_regularizer=regularizer),
+                kernel_type(kernel_number, kernel_size, padding='same', use_bn=False,
+                            kernel_regularizer=regularizer),
                 keras.layers.BatchNormalization()
-            ]
+            }
         )
         self.relu = keras.layers.ReLU()
         self.shortcut_conv = keras.Sequential(
             [
-                kernel_type(kernel_number, 1, strides=strides, kernel_regularizer=keras.regularizers.l2()),
+                kernel_type(kernel_number, 1, strides=strides, kernel_regularizer=regularizer),
                 keras.layers.BatchNormalization()
             ]
         )
@@ -75,10 +75,9 @@ class ResidualBottleneckBlock(keras.layers.Layer):
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_bottleneck_block = keras.Sequential(
             [
-                Conv3DBlock(kernel_number, 1, regularizer, use_bn=True, kernel_type=kernel_type),
-                Conv3DBlock(kernel_number, kernel_size, regularizer, padding='same', use_bn=True,
-                            kernel_type=kernel_type),
-                kernel_type(kernel_number * 4, 1, kernel_regularizer=regularizer, use_bias=False),
+                kernel_type(kernel_number, 1, regularizer, use_bn=True),
+                kernel_type(kernel_number, kernel_size, regularizer, padding='same', use_bn=True),
+                kernel_type(kernel_number * 4, 1, kernel_regularizer=regularizer, use_bn=False),
                 keras.layers.BatchNormalization()
             ]
         )
@@ -105,16 +104,15 @@ class ResidualConvBottleneckBlock(keras.layers.Layer):
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_conv_bottleneck_block = keras.Sequential(
             [
-                Conv3DBlock(kernel_number, 1, regularizer, strides=strides, use_bn=True, kernel_type=kernel_type),
-                Conv3DBlock(kernel_number, kernel_size, regularizer, padding='same', use_bn=True,
-                            kernel_type=kernel_type),
-                kernel_type(kernel_number * 4, 1, use_bias=False, kernel_regularizer=regularizer),
+                kernel_type(kernel_number, 1, regularizer, strides=strides, use_bn=True),
+                kernel_type(kernel_number, kernel_size, regularizer, padding='same', use_bn=True),
+                kernel_type(kernel_number * 4, 1, use_bn=False, kernel_regularizer=regularizer),
                 keras.layers.BatchNormalization()
             ]
         )
         self.relu = keras.layers.ReLU()
         self.shortcut_conv = keras.Sequential([
-            kernel_type(kernel_number * 4, 1, strides=strides, kernel_regularizer=keras.regularizers.l2()),
+            kernel_type(kernel_number * 4, 1, strides=strides, kernel_regularizer=regularizer),
             keras.layers.BatchNormalization()
         ]
         )
