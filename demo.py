@@ -8,12 +8,9 @@ from tensorflow.keras import mixed_precision
 mixed_precision.set_global_policy('mixed_float16')
 
 
-def train_resnet(use_squeeze_and_excitation, depth, kernel_name):
+def train_resnet(use_squeeze_and_excitation, depth, kernel_name, batch_size, number_of_frames, scale):
     seed_value = 5
-    batch_size = 16
     epochs = 200
-    scale = 2
-    number_of_frames = 100
     tf.random.set_seed(seed_value)
     train_dataset, validation_dataset, test_dataset, info = load_ucf101(batch_size, number_of_frames)
     input_shape = info.features['video'].shape
@@ -103,6 +100,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--use_squeeze_and_excitation', action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument('--depth', default=18, type=int, choices=[18, 34, 50, 102, 152])
+    parser.add_argument('--batch_size', type=int, default=16)
+    parser.add_argument('--frames', type=int, default=100)
+    parser.add_argument('--scale', type=int, default=2)
     parser.add_argument('--kernel', default='3D', choices=['3D', '(2+1)D', 'P3D-B', 'FAST', 'split-FAST'])
     args = parser.parse_args()
-    train_resnet(args.use_squeeze_and_excitation, args.depth, args.kernel)
+    train_resnet(args.use_squeeze_and_excitation, args.depth, args.kernel, args.batch_size, args.frames, args.scale)
