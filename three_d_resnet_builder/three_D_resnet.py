@@ -30,7 +30,7 @@ class ThreeDConvolutionResNet(keras.Model):
 
         resnet_head = keras.Sequential([
             keras.layers.InputLayer(input_shape),
-            kernel(64, 7, 2, padding='valid', use_bn=False, kernel_regularizer=regularizer),
+            kernel(64, 7, 2, padding='same', use_bn=False, kernel_regularizer=regularizer),
             keras.layers.BatchNormalization(),
             keras.layers.ReLU(),
             keras.layers.MaxPool3D(3, 2)])
@@ -46,7 +46,7 @@ class ThreeDConvolutionResNet(keras.Model):
                                                         kernel_type=kernel))
                 else:
                     resnet_body.add(residual_block(kernel_number, kernel_size, regularizer,
-                                                   squeeze_and_excitation, strides=strides, kernel_type=kernel))
+                                                   squeeze_and_excitation, strides=1, kernel_type=kernel))
                 strides = 2
             kernel_number *= 2
 
