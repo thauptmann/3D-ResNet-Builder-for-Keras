@@ -4,7 +4,7 @@ from .layers import Conv3DBlock
 
 
 class ThreeDBaseKernel:
-    def __init__(self, kernel_number, kernel_size, strides, padding, use_bn, kernel_regularizer):
+    def __init__(self, kernel_number, kernel_size, strides, padding='valid', use_bn=True, kernel_regularizer=None):
         self.kernel_number = kernel_number
         self.kernel_size = kernel_size
         self.strides = strides
