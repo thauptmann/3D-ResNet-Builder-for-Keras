@@ -33,7 +33,7 @@ three_d_resnet_builder.build_three_d_resnet(input_shape, output_shape, repetitio
 
 
 ## Kernel
-The package contains different types of kernel. The type can be with help of the *kernel_name* variable in the build function. Possible kernels are: 3D, (2+1)D[4], P3D-B[5], FAST[6], split-FAST[6].
+The package contains different types of kernel. The type can be choosen with help of the *kernel_name* variable in the build function. Possible kernels are: '3D', '(2+1)D'[4], 'P3D-B'[5], 'FAST'[6], 'split-FAST'[6].
 
 ## Demo
 For testing purposes I chose the Ucf101 dataset [3] to train on. It contains approximately 13.000 videos with 101 labels of different actions. The purpose of the demo is to show how to use the package, not to get the best results. Therefore important preprocessing steps (e.g. shuffling and data augmentation) are missing.
