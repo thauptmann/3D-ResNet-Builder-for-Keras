@@ -1,5 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras
+from kernel import ThreeD
 
 
 class ResidualBlock(keras.layers.Layer):
@@ -11,7 +12,8 @@ class ResidualBlock(keras.layers.Layer):
             [
                 kernel_type(kernel_number, kernel_size, strides, padding='same', use_bn=True,
                             kernel_regularizer=regularizer),
-                keras.layers.BatchNormalization()
+                kernel_type(kernel_number, kernel_size, strides, padding='same', use_bn=True,
+                            kernel_regularizer=regularizer, use_activation=False),
             ]
         )
         self.relu = keras.layers.ReLU()
@@ -38,7 +40,8 @@ class ResidualConvBlock(keras.layers.Layer):
             [
                 kernel_type(kernel_number, kernel_size, strides=strides, padding='same', use_bn=True,
                             kernel_regularizer=regularizer),
-                keras.layers.BatchNormalization()
+                kernel_type(kernel_number, kernel_size, strides, padding='same', use_bn=True,
+                            kernel_regularizer=regularizer, use_activation=False),
             ]
         )
         self.relu = keras.layers.ReLU()
@@ -72,10 +75,11 @@ class ResidualBottleneckBlock(keras.layers.Layer):
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_bottleneck_block = keras.Sequential(
             [
-                kernel_type(kernel_number, 1, regularizer, use_bn=True, strides=strides),
-                kernel_type(kernel_number, kernel_size, regularizer, use_bn=True, strides=strides),
-                kernel_type(kernel_number * 4, 1, regularizer, use_bn=False, strides=strides),
-                keras.layers.BatchNormalization()
+                ThreeD(kernel_number, 1, strides, 'same', use_bn=True, kernel_regularizer=regularizer),
+                kernel_type(kernel_number, kernel_size, kernel_regularizer=regularizer, use_bn=True, strides=strides,
+                            padding='same'),
+                ThreeD(kernel_number * 4, 1, strides, 'same', use_bn=True, kernel_regularizer=regularizer,
+                       use_activation=False),
             ]
         )
         self.relu = keras.layers.ReLU()
@@ -101,10 +105,10 @@ class ResidualConvBottleneckBlock(keras.layers.Layer):
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_conv_bottleneck_block = keras.Sequential(
             [
-                kernel_type(kernel_number, 1, regularizer, strides=strides, use_bn=True),
+                ThreeD(kernel_number, 1, strides, 'same', use_bn=True, kernel_regularizer=regularizer),
                 kernel_type(kernel_number, kernel_size, regularizer, padding='same', use_bn=True, strides=strides),
-                kernel_type(kernel_number * 4, 1, use_bn=False, kernel_regularizer=regularizer, strides=strides),
-                keras.layers.BatchNormalization()
+                ThreeD(kernel_number * 4, 1, strides, 'same', use_bn=True, kernel_regularizer=regularizer,
+                       use_activation=False),
             ]
         )
         self.relu = keras.layers.ReLU()
@@ -153,14 +157,15 @@ class Conv3DBlock(keras.layers.Layer):
     Convenient layer to create Conv3D -> Batch Normalization -> ReLU blocks faster
     """
     def __init__(self, kernel_number, kernel_size, regularizer=None, strides=1, use_bn=False, padding='same',
-                 **kwargs):
+                 use_activation=True,  **kwargs):
         super(Conv3DBlock, self).__init__(**kwargs)
         self.custom_conv_3d = keras.Sequential()
         self.custom_conv_3d.add(keras.layers.Conv3D(kernel_number, kernel_size, strides, padding=padding,
                                                     use_bias=not use_bn, kernel_regularizer=regularizer))
         if use_bn:
             self.custom_conv_3d.add(keras.layers.BatchNormalization())
-        self.custom_conv_3d.add(keras.layers.ReLU())
+        if use_activation:
+            self.custom_conv_3d.add(keras.layers.ReLU())
 
     def __call__(self, inputs, training=None):
         return self.custom_conv_3d(inputs, training=training)
