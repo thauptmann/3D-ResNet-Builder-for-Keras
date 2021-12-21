@@ -105,7 +105,7 @@ class ResidualConvBottleneckBlock(keras.layers.Layer):
             [
                 ThreeD(kernel_number, 1, strides, 'valid', use_bn=True, kernel_regularizer=regularizer),
                 kernel_type(kernel_number, kernel_size, 1, 'same', kernel_regularizer=regularizer, use_bn=True),
-                ThreeD(kernel_number * 4, 1, strides, 'valid', use_bn=True, kernel_regularizer=regularizer,
+                ThreeD(kernel_number * 4, 1, 1, 'valid', use_bn=True, kernel_regularizer=regularizer,
                        use_activation=False),
             ]
         )
