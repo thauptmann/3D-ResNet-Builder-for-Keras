@@ -68,16 +68,16 @@ class ResidualConvBlock(keras.layers.Layer):
 
 
 class ResidualBottleneckBlock(keras.layers.Layer):
-    def __init__(self, kernel_number, kernel_size, regularizer=None, squeeze_and_excitation=False, strides=1,
+    def __init__(self, kernel_number, kernel_size, regularizer=None, squeeze_and_excitation=False,
                  kernel_type=None, **kwargs):
         super(ResidualBottleneckBlock, self).__init__(**kwargs)
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_bottleneck_block = keras.Sequential(
             [
-                ThreeD(kernel_number, 1, strides, 'same', use_bn=True, kernel_regularizer=regularizer),
-                kernel_type(kernel_number, kernel_size, kernel_regularizer=regularizer, use_bn=True, strides=strides,
+                ThreeD(kernel_number, 1, 1, 'same', use_bn=True, kernel_regularizer=regularizer),
+                kernel_type(kernel_number, kernel_size, kernel_regularizer=regularizer, use_bn=True, strides=1,
                             padding='same'),
-                ThreeD(kernel_number * 4, 1, strides, 'same', use_bn=True, kernel_regularizer=regularizer,
+                ThreeD(kernel_number * 4, 1, 1, 'same', use_bn=True, kernel_regularizer=regularizer,
                        use_activation=False),
             ]
         )
