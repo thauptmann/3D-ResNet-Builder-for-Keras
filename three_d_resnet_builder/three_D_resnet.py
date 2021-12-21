@@ -38,9 +38,9 @@ class ThreeDConvolutionResNet(keras.Model):
         resnet_body = keras.Sequential()
         strides = 1
         kernel_number = 64
-        for repetition in repetitions:
-            for i in range(repetition):
-                if i == 0:
+        for i, repetition in enumerate(repetitions):
+            for j in range(repetition):
+                if j == 0 and ((not use_bottleneck and i > 0) or use_bottleneck):
                     resnet_body.add(residual_conv_block(kernel_number, kernel_size, regularizer,
                                                         squeeze_and_excitation=squeeze_and_excitation, strides=strides,
                                                         kernel_type=kernel))
