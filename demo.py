@@ -103,7 +103,7 @@ if __name__ == '__main__':
     parser.add_argument('--use_squeeze_and_excitation', action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument('--depth', default=18, type=int, choices=[18, 34, 50, 102, 152])
     parser.add_argument('--batch_size', type=int, default=16)
-    parser.add_argument('--frames', type=int, default=100)
+    parser.add_argument('--frames', type=int, default=50)
     parser.add_argument('--scale', type=int, default=2)
     parser.add_argument('--kernel', default='3D', choices=['3D', '(2+1)D', 'P3D-B', 'FAST', 'split-FAST'])
     args = parser.parse_args()
