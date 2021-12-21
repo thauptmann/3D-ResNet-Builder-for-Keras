@@ -32,7 +32,7 @@ class PThreeDMinusB(keras.layers.Layer):
 
 
 class FAST(keras.layers.Layer):
-    def __init__(self,  kernel_number, kernel_size, strides, padding, use_bn, kernel_regularizer, use_activation,
+    def __init__(self,  kernel_number, kernel_size, strides, padding, use_bn, kernel_regularizer, use_activation=True,
                  **kwargs):
         super(FAST, self).__init__(**kwargs)
         self.xy = Conv3DBlock(kernel_number, (1, kernel_size, kernel_size), kernel_regularizer, strides, use_bn,
@@ -49,7 +49,7 @@ class FAST(keras.layers.Layer):
 
 
 class SplitFAST(tf.keras.layers.Layer):
-    def __init__(self,  kernel_number, kernel_size, strides, padding, use_bn, kernel_regularizer, use_activation,
+    def __init__(self,  kernel_number, kernel_size, strides, padding, use_bn, kernel_regularizer, use_activation=True,
                  **kwargs):
         super(SplitFAST, self).__init__(**kwargs)
         self.xy = Conv3DBlock(kernel_number, (1, kernel_size, kernel_size), kernel_regularizer, strides, use_bn,
