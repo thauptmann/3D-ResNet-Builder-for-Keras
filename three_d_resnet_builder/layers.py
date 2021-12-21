@@ -40,7 +40,7 @@ class ResidualConvBlock(keras.layers.Layer):
             [
                 kernel_type(kernel_number, kernel_size, strides=strides, padding='same', use_bn=True,
                             kernel_regularizer=regularizer),
-                kernel_type(kernel_number, kernel_size, strides, padding='same', use_bn=True,
+                kernel_type(kernel_number, kernel_size, 1, padding='same', use_bn=True,
                             kernel_regularizer=regularizer, use_activation=False),
             ]
         )
