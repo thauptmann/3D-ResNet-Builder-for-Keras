@@ -104,7 +104,7 @@ class ResidualConvBottleneckBlock(keras.layers.Layer):
         self.resnet_conv_bottleneck_block = keras.Sequential(
             [
                 ThreeD(kernel_number, 1, strides, 'valid', use_bn=True, kernel_regularizer=regularizer),
-                kernel_type(kernel_number, kernel_size, regularizer, padding='same', use_bn=True,
+                kernel_type(kernel_number, kernel_size, 1, regularizer, padding='same', use_bn=True,
                             kernel_regularizer=regularizer),
                 ThreeD(kernel_number * 4, 1, strides, 'valid', use_bn=True, kernel_regularizer=regularizer,
                        use_activation=False),
