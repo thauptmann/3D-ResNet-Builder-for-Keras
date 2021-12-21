@@ -48,7 +48,7 @@ class ResidualConvBlock(keras.layers.Layer):
         self.shortcut_conv = keras.Sequential(
             [
                 kernel_type(kernel_number, 1,  kernel_regularizer=regularizer, strides=strides, use_bn=True,
-                            padding='valid')
+                            padding='same')
             ]
         )
         if squeeze_and_excitation:
