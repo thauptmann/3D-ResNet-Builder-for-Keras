@@ -4,15 +4,15 @@ from .kernel import ThreeD
 
 
 class ResidualBlock(keras.layers.Layer):
-    def __init__(self, kernel_number, kernel_size, regularizer=None, squeeze_and_excitation=False, strides=1,
+    def __init__(self, kernel_number, kernel_size, regularizer=None, squeeze_and_excitation=False,
                  kernel_type=None, **kwargs):
         super(ResidualBlock, self).__init__(**kwargs)
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_block = keras.Sequential(
             [
-                kernel_type(kernel_number, kernel_size, strides, padding='same', use_bn=True,
+                kernel_type(kernel_number, kernel_size, 1, padding='same', use_bn=True,
                             kernel_regularizer=regularizer),
-                kernel_type(kernel_number, kernel_size, strides, padding='same', use_bn=True,
+                kernel_type(kernel_number, kernel_size, 1, padding='same', use_bn=True,
                             kernel_regularizer=regularizer, use_activation=False),
             ]
         )
