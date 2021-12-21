@@ -61,7 +61,7 @@ class SplitFAST(tf.keras.layers.Layer):
 
     def __call__(self, inputs, training=None):
         intermediate_output = self.xy(inputs, training=training)
-        left_output = self.xy(intermediate_output, training=training)
+        left_output = self.xt(intermediate_output, training=training)
         right_output = self.yt(intermediate_output, training=training)
         return tf.math.add(left_output, right_output)
 
