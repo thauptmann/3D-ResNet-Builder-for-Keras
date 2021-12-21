@@ -30,9 +30,7 @@ class ThreeDConvolutionResNet(keras.Model):
 
         resnet_head = keras.Sequential([
             keras.layers.InputLayer(input_shape),
-            kernel(64, 7, 2, padding='same', use_bn=False, kernel_regularizer=regularizer),
-            keras.layers.BatchNormalization(),
-            keras.layers.ReLU(),
+            kernel(64, 7, 2, padding='same', use_bn=True, kernel_regularizer=regularizer),
             keras.layers.MaxPool3D(3, 2)])
 
         resnet_body = keras.Sequential()
