@@ -12,6 +12,7 @@ def build_three_d_resnet(
     use_bottleneck=False,
     kernel_size=3,
     kernel_name="3D",
+    append_tail=True,
 ):
     """Return a full customizable resnet.
 
@@ -38,6 +39,7 @@ def build_three_d_resnet(
         use_bottleneck,
         kernel_size,
         kernel=conv_kernel,
+        append_tail=append_tail,
     )
 
 
@@ -48,6 +50,7 @@ def build_three_d_resnet_18(
     regularizer=None,
     squeeze_and_excitation=False,
     kernel_name="3D",
+    append_tail=True,
 ):
     """Return a customizable resnet_18.
 
@@ -68,6 +71,7 @@ def build_three_d_resnet_18(
         regularizer,
         squeeze_and_excitation,
         kernel=conv_kernel,
+        append_tail=append_tail,
     )
 
 
@@ -78,6 +82,7 @@ def build_three_d_resnet_34(
     regularizer=None,
     squeeze_and_excitation=False,
     kernel_name="3D",
+    append_tail=True,
 ):
     """Return a customizable resnet_34.
 
@@ -98,6 +103,7 @@ def build_three_d_resnet_34(
         regularizer,
         squeeze_and_excitation,
         kernel=conv_kernel,
+        append_tail=append_tail,
     )
 
 
@@ -108,6 +114,7 @@ def build_three_d_resnet_50(
     regularizer=None,
     squeeze_and_excitation=False,
     kernel_name="3D",
+    append_tail=True,
 ):
     """Return a customizable resnet_50.
 
@@ -129,6 +136,7 @@ def build_three_d_resnet_50(
         squeeze_and_excitation,
         use_bottleneck=True,
         kernel=conv_kernel,
+        append_tail=append_tail,
     )
 
 
@@ -139,6 +147,7 @@ def build_three_d_resnet_102(
     regularizer=None,
     squeeze_and_excitation=False,
     kernel_name="3D",
+    append_tail=True,
 ):
     """Return a customizable resnet_102.
 
@@ -160,6 +169,7 @@ def build_three_d_resnet_102(
         squeeze_and_excitation,
         use_bottleneck=True,
         kernel=conv_kernel,
+        append_tail=append_tail,
     )
 
 
@@ -170,6 +180,7 @@ def build_three_d_resnet_152(
     regularizer=None,
     squeeze_and_excitation=False,
     kernel_name="3D",
+    append_tail=True,
 ):
     """Return a customizable resnet_152
 
@@ -191,4 +202,5 @@ def build_three_d_resnet_152(
         squeeze_and_excitation,
         use_bottleneck=True,
         kernel=conv_kernel,
+        append_tail=append_tail,
     )

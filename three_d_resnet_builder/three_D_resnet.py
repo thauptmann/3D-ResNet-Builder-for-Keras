@@ -22,6 +22,7 @@ class ThreeDConvolutionResNet(keras.Model):
         use_bottleneck=False,
         kernel_size=3,
         kernel=None,
+        append_tail=True,
     ):
         """Build the desired network.
 
@@ -85,19 +86,26 @@ class ThreeDConvolutionResNet(keras.Model):
                     )
                 strides = 2
             kernel_number *= 2
-
-        # fix resnet tail
-        resnet_tail = keras.Sequential(
+        resnet_body.add(
             [
                 keras.layers.GlobalAvgPool3D(),
                 keras.layers.Flatten(),
-                keras.layers.Dense(output_shape, kernel_regularizer=regularizer),
-                keras.layers.Activation(output_activation, dtype="float32"),
             ]
         )
-        self.resnet = keras.Sequential([resnet_head, resnet_body, resnet_tail])
 
-    def call(self, inputs, training=False, **kwargs):
+        # fix resnet tail
+        if append_tail:
+            resnet_tail = keras.Sequential(
+                [
+                    keras.layers.Dense(output_shape, kernel_regularizer=regularizer),
+                    keras.layers.Activation(output_activation, dtype="float32"),
+                ]
+            )
+            self.resnet = keras.Sequential([resnet_head, resnet_body, resnet_tail])
+        else:
+            self.resnet = keras.Sequential([resnet_head, resnet_body])
+
+    def call(self, inputs, training=None, **kwargs):
         """Called to train the network or predict values.
 
         :param inputs:
@@ -105,4 +113,4 @@ class ThreeDConvolutionResNet(keras.Model):
         :param kwargs:
         :return:
         """
-        return self.resnet(inputs)
+        return self.resnet(inputs, training=training)
