@@ -4,16 +4,36 @@ from .kernel import ThreeD
 
 
 class ResidualBlock(keras.layers.Layer):
-    def __init__(self, kernel_number, kernel_size, regularizer=None, squeeze_and_excitation=False,
-                 kernel_type=None, **kwargs):
+    def __init__(
+        self,
+        kernel_number,
+        kernel_size,
+        regularizer=None,
+        squeeze_and_excitation=False,
+        kernel_type=None,
+        **kwargs
+    ):
         super(ResidualBlock, self).__init__(**kwargs)
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_block = keras.Sequential(
             [
-                kernel_type(kernel_number, kernel_size, 1, padding='same', use_bn=True,
-                            kernel_regularizer=regularizer),
-                kernel_type(kernel_number, kernel_size, 1, padding='same', use_bn=True,
-                            kernel_regularizer=regularizer, use_activation=False),
+                kernel_type(
+                    kernel_number,
+                    kernel_size,
+                    1,
+                    padding="same",
+                    use_bn=True,
+                    kernel_regularizer=regularizer,
+                ),
+                kernel_type(
+                    kernel_number,
+                    kernel_size,
+                    1,
+                    padding="same",
+                    use_bn=True,
+                    kernel_regularizer=regularizer,
+                    use_activation=False,
+                ),
             ]
         )
         self.relu = keras.layers.ReLU()
@@ -32,23 +52,50 @@ class ResidualBlock(keras.layers.Layer):
 
 
 class ResidualConvBlock(keras.layers.Layer):
-    def __init__(self, kernel_number, kernel_size, regularizer=None, strides=1, squeeze_and_excitation=False,
-                 kernel_type=None, **kwargs):
+    def __init__(
+        self,
+        kernel_number,
+        kernel_size,
+        regularizer=None,
+        strides=1,
+        squeeze_and_excitation=False,
+        kernel_type=None,
+        **kwargs
+    ):
         super(ResidualConvBlock, self).__init__(**kwargs)
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_conv_block = keras.Sequential(
             [
-                kernel_type(kernel_number, kernel_size, strides=strides, padding='same', use_bn=True,
-                            kernel_regularizer=regularizer),
-                kernel_type(kernel_number, kernel_size, 1, padding='same', use_bn=True,
-                            kernel_regularizer=regularizer, use_activation=False),
+                kernel_type(
+                    kernel_number,
+                    kernel_size,
+                    strides=strides,
+                    padding="same",
+                    use_bn=True,
+                    kernel_regularizer=regularizer,
+                ),
+                kernel_type(
+                    kernel_number,
+                    kernel_size,
+                    1,
+                    padding="same",
+                    use_bn=True,
+                    kernel_regularizer=regularizer,
+                    use_activation=False,
+                ),
             ]
         )
         self.relu = keras.layers.ReLU()
         self.shortcut_conv = keras.Sequential(
             [
-                kernel_type(kernel_number, 1,  kernel_regularizer=regularizer, strides=strides, use_bn=True,
-                            padding='same')
+                kernel_type(
+                    kernel_number,
+                    1,
+                    kernel_regularizer=regularizer,
+                    strides=strides,
+                    use_bn=True,
+                    padding="same",
+                )
             ]
         )
         if squeeze_and_excitation:
@@ -68,17 +115,44 @@ class ResidualConvBlock(keras.layers.Layer):
 
 
 class ResidualBottleneckBlock(keras.layers.Layer):
-    def __init__(self, kernel_number, kernel_size, regularizer=None, squeeze_and_excitation=False,
-                 kernel_type=None, **kwargs):
+    def __init__(
+        self,
+        kernel_number,
+        kernel_size,
+        regularizer=None,
+        squeeze_and_excitation=False,
+        kernel_type=None,
+        **kwargs
+    ):
         super(ResidualBottleneckBlock, self).__init__(**kwargs)
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_bottleneck_block = keras.Sequential(
             [
-                ThreeD(kernel_number, 1, 1, 'same', use_bn=True, kernel_regularizer=regularizer),
-                kernel_type(kernel_number, kernel_size, kernel_regularizer=regularizer, use_bn=True, strides=1,
-                            padding='same'),
-                ThreeD(kernel_number * 4, 1, 1, 'same', use_bn=True, kernel_regularizer=regularizer,
-                       use_activation=False),
+                ThreeD(
+                    kernel_number,
+                    1,
+                    1,
+                    "same",
+                    use_bn=True,
+                    kernel_regularizer=regularizer,
+                ),
+                kernel_type(
+                    kernel_number,
+                    kernel_size,
+                    kernel_regularizer=regularizer,
+                    use_bn=True,
+                    strides=1,
+                    padding="same",
+                ),
+                ThreeD(
+                    kernel_number * 4,
+                    1,
+                    1,
+                    "same",
+                    use_bn=True,
+                    kernel_regularizer=regularizer,
+                    use_activation=False,
+                ),
             ]
         )
         self.relu = keras.layers.ReLU()
@@ -97,29 +171,67 @@ class ResidualBottleneckBlock(keras.layers.Layer):
 
 
 class ResidualConvBottleneckBlock(keras.layers.Layer):
-    def __init__(self, kernel_number, kernel_size, regularizer=None, squeeze_and_excitation=False, strides=1,
-                 kernel_type=None, **kwargs):
+    def __init__(
+        self,
+        kernel_number,
+        kernel_size,
+        regularizer=None,
+        squeeze_and_excitation=False,
+        strides=1,
+        kernel_type=None,
+        **kwargs
+    ):
         super(ResidualConvBottleneckBlock, self).__init__(**kwargs)
         self.squeeze_and_excitation = squeeze_and_excitation
         self.resnet_conv_bottleneck_block = keras.Sequential(
             [
-                ThreeD(kernel_number, 1, strides, 'valid', use_bn=True, kernel_regularizer=regularizer),
-                kernel_type(kernel_number, kernel_size, 1, 'same', kernel_regularizer=regularizer, use_bn=True),
-                ThreeD(kernel_number * 4, 1, 1, 'valid', use_bn=True, kernel_regularizer=regularizer,
-                       use_activation=False),
+                ThreeD(
+                    kernel_number,
+                    1,
+                    strides,
+                    "valid",
+                    use_bn=True,
+                    kernel_regularizer=regularizer,
+                ),
+                kernel_type(
+                    kernel_number,
+                    kernel_size,
+                    1,
+                    "same",
+                    kernel_regularizer=regularizer,
+                    use_bn=True,
+                ),
+                ThreeD(
+                    kernel_number * 4,
+                    1,
+                    1,
+                    "valid",
+                    use_bn=True,
+                    kernel_regularizer=regularizer,
+                    use_activation=False,
+                ),
             ]
         )
         self.relu = keras.layers.ReLU()
-        self.shortcut_conv = keras.Sequential([
-            kernel_type(kernel_number * 4, 1, strides=strides, kernel_regularizer=regularizer, padding='valid',
-                        use_bn=True)
-        ]
+        self.shortcut_conv = keras.Sequential(
+            [
+                kernel_type(
+                    kernel_number * 4,
+                    1,
+                    strides=strides,
+                    kernel_regularizer=regularizer,
+                    padding="valid",
+                    use_bn=True,
+                )
+            ]
         )
         if self.squeeze_and_excitation:
             self.se_path = SqueezeAndExcitationPath(kernel_number * 4)
 
     def call(self, inputs, training=None):
-        intermediate_output = self.resnet_conv_bottleneck_block(inputs, training=training)
+        intermediate_output = self.resnet_conv_bottleneck_block(
+            inputs, training=training
+        )
         shortcut = self.shortcut_conv(inputs, training=training)
 
         if self.squeeze_and_excitation:
@@ -138,9 +250,12 @@ class SqueezeAndExcitationPath(keras.layers.Layer):
         self.se_path = keras.Sequential(
             [
                 keras.layers.GlobalAvgPool3D(),
-                keras.layers.Dense(int(self.channel / ratio), activation='relu',
-                                   kernel_regularizer=keras.regularizers.l2()),
-                keras.layers.Dense(channel, activation='sigmoid'),
+                keras.layers.Dense(
+                    int(self.channel / ratio),
+                    activation="relu",
+                    kernel_regularizer=keras.regularizers.l2(),
+                ),
+                keras.layers.Dense(channel, activation="sigmoid"),
             ]
         )
 
@@ -148,4 +263,3 @@ class SqueezeAndExcitationPath(keras.layers.Layer):
         weights = self.se_path(inputs, training=training)
         reshaped_weights = tf.reshape(weights, (-1, 1, 1, 1, self.channel))
         return reshaped_weights
-
