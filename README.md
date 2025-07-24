@@ -52,13 +52,6 @@ $ python -m pip install -r requirements.txt
 $ python demo.py
 ~~~
 
-### Results
-
-| Model | Top-1 Accuracy | Top-5-Accuracy |
-|---|---|---|
-|ResNet-18|%|%|
-|SE-ResNet-18|%|%|
-
 
 ---
 
